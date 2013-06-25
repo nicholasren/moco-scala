@@ -8,7 +8,7 @@ object MocoScala {
     val server = new MocoHttpServer(httpServer.asInstanceOf[ActualHttpServer])
     try {
       server.start()
-      assertion()
+      assertion.apply()
     }
     finally server.stop()
   }
