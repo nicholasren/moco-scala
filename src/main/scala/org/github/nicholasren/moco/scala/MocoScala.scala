@@ -4,12 +4,13 @@ import com.github.dreamhead.moco.HttpServer
 import com.github.dreamhead.moco.internal.{ActualHttpServer, MocoHttpServer}
 
 object MocoScala {
-  def running(httpServer: HttpServer, assertion: () => Unit) = {
+
+  def running(httpServer: HttpServer)(testFunc: => Unit) = {
     val server = new MocoHttpServer(httpServer.asInstanceOf[ActualHttpServer])
     try {
-      server.start()
-      assertion.apply()
+      server.start
+      testFunc
     }
-    finally server.stop()
+    finally server.stop
   }
 }
