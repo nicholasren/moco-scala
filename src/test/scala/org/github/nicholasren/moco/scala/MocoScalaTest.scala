@@ -27,7 +27,7 @@ class MocoScalaTest extends FunSuite {
 
 
   test("should_return_expected_response_based_on_specified_request") {
-    server.request(by("foo")).response("bar")
+    server request(by("foo")) response("bar")
 
     running(server) {
       assert(post(root, "foo") === "bar")
@@ -35,7 +35,7 @@ class MocoScalaTest extends FunSuite {
   }
 
   test("should return response based on specified uri") {
-    server.request(by(uri("/foo"))).response("bar")
+    server request(by(uri("/foo"))) response("bar")
 
     running(server) {
       assert(get(remoteUrl("/foo")) === "bar")
