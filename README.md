@@ -4,22 +4,23 @@ moco-scala
 This is the scala wrapper for [moco](https://github.com/dreamhead/moco)
 
 
-###How to use
+### How to use
 
-* add dependency:
+Add dependency:
+```sbt
+    libraryDependencies += "com.github.nicholasren" % "moco-scala" % "0.0.1"
+```
 
-	libraryDependencies += "com.github.nicholasren" % "moco-scala" % "0.0.1"
-
-* code sample:
-
+Sample:
 ```scala
-val server = httpserver(port)
+//create server
+val server = httpserver(8080)
 
-test("should return expected response") {
-	server response "foo"
-		running(server) {
-    	val response = get(root)
-	    assert(response === "foo")
-    }
+//configure
+server.request(by("foo")).response("bar")
+
+//using
+running(server) {
+//do your stuff
 }
 ```
