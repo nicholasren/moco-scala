@@ -4,7 +4,7 @@ import org.apache.http.client.fluent.Request
 
 object RemoteTestHelper {
 
-  def port = 8080
+  def defaultPort = 8080
 
   def get(uri: String): String = {
     Request.Get(uri).execute().returnContent().asString
@@ -22,7 +22,7 @@ object RemoteTestHelper {
 
 
   def root: String = {
-    "http://localhost:" + port
+    "http://localhost:" + defaultPort
   }
 
   def remoteUrl(uri: String) = root + uri
