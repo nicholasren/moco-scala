@@ -2,8 +2,9 @@ package org.github.nicholasren.moco.scala.dsl
 
 import com.github.dreamhead.moco.RequestMatcher
 import com.github.dreamhead.moco.internal.{ActualHttpServer, MocoHttpServer}
+import com.github.dreamhead.moco.resource.Resource
 
-class SMoco(port: Int, configs: => (Option[RequestMatcher], String)) {
+class SMoco(port: Int, configs: => (Option[RequestMatcher], Resource)) {
   val server = com.github.dreamhead.moco.Moco.httpserver(port)
   val (matcher, response) = configs
 
@@ -14,7 +15,6 @@ class SMoco(port: Int, configs: => (Option[RequestMatcher], String)) {
 }
 
 object SMoco {
-
   def running(smoco: SMoco)(block: => Unit) = {
     val server = new MocoHttpServer(smoco.server.asInstanceOf[ActualHttpServer])
     try {

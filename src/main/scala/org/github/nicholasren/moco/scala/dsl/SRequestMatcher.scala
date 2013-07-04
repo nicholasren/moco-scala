@@ -21,4 +21,11 @@ object SRequestMatcher {
       Moco.by(resource)
     }
   }
+
+  def pathResource = new SRequestMatcher {
+    def ->(value: String): RequestMatcher = {
+      val pathResource = Moco.pathResource(value)
+      Moco.by(pathResource)
+    }
+  }
 }

@@ -13,14 +13,14 @@ libraryDependencies += "com.github.nicholasren" % "moco-scala" % "0.0.1"
 
 Sample:
 ```scala
-//create server
-val server = httpserver(8080)
+//create server and configure
+val theServer = server(8080) {
+    when(uri -> "/bar") then "foo"
+}
 
-//configure
-server request(by("foo")) response("bar")
 
-//using
-running(server) {
-//do your stuff
+//running the created server
+running(theServer) {
+    //testing your stuff
 }
 ```

@@ -20,6 +20,16 @@ object RemoteTestHelper {
     content.asString();
   }
 
+  def statusCode(method: String, uri: String) = {
+
+    val request = method match {
+      case "GET" => Request.Get(uri)
+      case "POST" => Request.Post(uri)
+    }
+
+    request.execute().returnResponse().getStatusLine.getStatusCode
+  }
+
 
   def root: String = {
     "http://localhost:" + defaultPort
