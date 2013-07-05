@@ -24,3 +24,5 @@ running(theServer) {
     //testing your stuff
 }
 ```
+
+for detail, please find in the [API reference](doc/api.md)
