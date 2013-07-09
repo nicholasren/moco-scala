@@ -4,8 +4,7 @@ import org.scalatest.{BeforeAndAfter, FunSuite}
 
 import SMoco._
 import org.github.nicholasren.moco.scala.helper.RemoteTestHelper._
-import SRequestMatcher._
-import SResource._
+import RequestMatcherBuilder._
 import com.google.common.io.ByteStreams
 
 class SMocoTest extends FunSuite with BeforeAndAfter {
@@ -55,13 +54,40 @@ class SMocoTest extends FunSuite with BeforeAndAfter {
 
   test("should return expected response from file") {
     val theServer = server(8080) {
-      response {
+      response(
         file("src/test/resources/bar.response")
-      }
+      )
     }
 
     running(theServer) {
       assert(get(root) === "bar")
+    }
+  }
+
+  test("should match request based on multiple matchers with AND operator") {
+    val theServer = server(8080) {
+      when(
+        uri -> "/foo" and method -> "GET"
+      ) then "bar"
+    }
+
+    running(theServer) {
+      assert(get(remoteUrl("/foo")) === "bar")
+      assert(statusCode("POST", root) === 400)
+    }
+  }
+
+  test("should match request based on multiple matchers with OR operator") {
+    val theServer = server(8080) {
+      when(
+        uri -> "/foo" or method -> "GET"
+      ) then "bar"
+    }
+
+    running(theServer) {
+      assert(get(root) === "bar") //method matched
+      assert(post(remoteUrl("/foo"), "") === "bar") //uri matched
+      assert(statusCode("POST", remoteUrl("/blah")) === 400) // none was matched
     }
   }
 }
