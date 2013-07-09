@@ -11,7 +11,7 @@ class SMocoTest extends FunSuite with BeforeAndAfter {
 
   test("should return expected response") {
     val theServer = server(8080) {
-      response("bar")
+      default("bar")
     }
 
     running(theServer) {
@@ -54,7 +54,7 @@ class SMocoTest extends FunSuite with BeforeAndAfter {
 
   test("should return expected response from file") {
     val theServer = server(8080) {
-      response(
+      default(
         file("src/test/resources/bar.response")
       )
     }
@@ -89,5 +89,38 @@ class SMocoTest extends FunSuite with BeforeAndAfter {
       assert(post(remoteUrl("/foo"), "") === "bar") //uri matched
       assert(statusCode("POST", remoteUrl("/blah")) === 400) // none was matched
     }
+  }
+
+  test("should match put method via api") {
+    val theServer = server(8080) {
+      when(method -> "PUT") then "bar"
+    }
+
+    running(theServer) {
+      assert(put(root) === "bar")
+    }
+  }
+
+  test("should match delete method via api") {
+    val theServer = server(8080) {
+      when(method -> "DELETE") then "bar"
+    }
+
+    running(theServer) {
+      assert(delete(root) === "bar")
+    }
+  }
+
+  test("should return content one by one") {
+    val theServer = server(8080) {
+      when(uri -> "/foo") then seq("first", "second", "third")
+    }
+
+    running(theServer) {
+      assert(get(remoteUrl("/foo")) === "first")
+      assert(get(remoteUrl("/foo")) === "second")
+      assert(get(remoteUrl("/foo")) === "third")
+    }
+
   }
 }

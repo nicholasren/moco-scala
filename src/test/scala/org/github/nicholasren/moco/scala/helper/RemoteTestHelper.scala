@@ -14,6 +14,14 @@ object RemoteTestHelper {
     postBytes(uri, content.getBytes())
   }
 
+  def put(uri: String) = {
+    Request.Put(uri).execute().returnContent().toString()
+  }
+
+  def delete(uri: String) = {
+    Request.Delete(uri).execute().returnContent().toString()
+  }
+
   def postBytes(uri: String, bytes: Array[Byte]) = {
     val content = Request.Post(uri).bodyByteArray(bytes)
       .execute().returnContent();
