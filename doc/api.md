@@ -65,11 +65,8 @@ We can return different response for different HTTP version:
 We will focus HTTP header at times:
 
 
-```java
-server.request(eq(header("foo"), "bar")).response("blah")
-when {
-    header -> "foo" -> "bar"
-} then "blah"
+```scala
+when (header -> "foo" -> "bar") then "blah"
 ```
 
 
@@ -117,7 +114,6 @@ By default, response HTTP version is supposed to request HTTP version, but you c
 ### Header(WIP)
 
 ### Url(WIP)
-
 
 ### Redirect(WIP)
 

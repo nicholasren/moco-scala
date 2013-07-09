@@ -12,7 +12,7 @@ class SMocoTest extends FunSuite with BeforeAndAfter {
 
   test("should return expected response") {
     val theServer = server(8080) {
-      response { text("bar")  }
+      response("bar")
     }
 
     running(theServer) {
@@ -22,8 +22,7 @@ class SMocoTest extends FunSuite with BeforeAndAfter {
 
   test("should return expected response based on specified request uri") {
     val theServer = server(8080) {
-      when(uri -> "/foo") then
-        { text("bar")  }
+      when(uri -> "/foo") then "bar"
     }
 
     running(theServer) {
@@ -33,8 +32,7 @@ class SMocoTest extends FunSuite with BeforeAndAfter {
 
   test("should return expected response based on specified request method") {
     val theServer = server(8080) {
-      when(method -> "GET") then 
-        { text("foo")  }
+      when(method -> "GET") then "foo"
     }
 
     running(theServer) {
@@ -45,8 +43,7 @@ class SMocoTest extends FunSuite with BeforeAndAfter {
 
   test("should return expected response based on path resource") {
     val theServer = server(8080) {
-      when(pathResource -> "foo.request") then 
-        {text("bar")}
+      when(pathResource -> "foo.request") then "bar"
     }
 
     running(theServer) {
@@ -58,7 +55,9 @@ class SMocoTest extends FunSuite with BeforeAndAfter {
 
   test("should return expected response from file") {
     val theServer = server(8080) {
-      response {file("src/test/resources/bar.response")}
+      response {
+        file("src/test/resources/bar.response")
+      }
     }
 
     running(theServer) {
