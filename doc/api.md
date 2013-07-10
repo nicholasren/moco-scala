@@ -39,18 +39,15 @@ Sometimes, your request has parameters:
 It's easy to response based on specified HTTP method:
 
 ```scala
-when(method -> "GET") then "bar"
+when(method -> "get") then "bar"
 ```
 
-Also for POST method:
-
-* Java API
+Also for POST / PUT /DELETE method:
 
 ```scala
-when {
-    method -> "POST"
-    content -> "foo"
-} then "bar"
+when(method -> "post") then "bar"
+when(method -> "put") then "bar"
+when(method -> "delete") then "bar"
 ```
 
 
@@ -64,11 +61,23 @@ We can return different response for different HTTP version:
 ### Header
 We will focus HTTP header at times:
 
-
 ```scala
+//WIP
 when (header -> "foo" -> "bar") then "blah"
 ```
 
+### Combined matcher
+You can combine multiple matcher with `and` or `or` method in the `when` clause
+
+```scala
+when(uri -> "/foo"
+        and method -> "get"
+) then "bar"
+
+when(uri -> "/foo"
+        or method -> "get"
+) then "bar"
+```
 
 ### Cookie(WIP)
 
@@ -89,17 +98,17 @@ Json is rising with RESTful style architecture. Just like XML, in the most case,
 ### Content(WIP)
 
 As you have seen in previous example, response with content is pretty easy.
-
+if you want to return same response for all requests, you can use `default`
 
 ```scala
-response "bar"
+default "bar"
 ```
 
 The same as request, you can response with a file if content is too large to put in a string.
 
 
-```java
-response { file "path/to/your/file" }
+```scala
+default file("path/to/your/file")
 ```
 
 ### Status Code(WIP)

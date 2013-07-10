@@ -8,9 +8,7 @@ libraryDependencies += "com.github.dreamhead" % "moco-core" % "0.7"
 
 libraryDependencies += "org.scalatest" % "scalatest_2.10" % "1.9.1" % "test"
 
-libraryDependencies += "org.apache.httpcomponents" % "fluent-hc" % "4.2.5"
-
-
+libraryDependencies += "org.apache.httpcomponents" % "fluent-hc" % "4.2.5" % "test"
 
 publishTo <<= version { v: String =>
   val nexus = "https://oss.sonatype.org/"
@@ -20,7 +18,7 @@ publishTo <<= version { v: String =>
     Some("releases" at nexus + "service/local/staging/deploy/maven2")
 }
 
-organization := "org.specs2"
+organization := "com.github.nicholasren"
 
 publishMavenStyle := true
 
@@ -33,7 +31,7 @@ pomExtra := (
   <licenses>
     <license>
       <name>MIT</name>
-      <url>https://github.com/nicholasren/moco-scala/MIT-LICENSE.txt</url>
+      <url>https://raw.github.com/nicholasren/moco-scala/master/MIT-LICENSE.txt</url>
       <distribution>repo</distribution>
     </license>
   </licenses>

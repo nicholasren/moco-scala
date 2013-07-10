@@ -1,14 +1,14 @@
 moco-scala
 ==========
 
-This is the scala wrapper for [moco](https://github.com/dreamhead/moco).
+This is a scala wrapper for [moco](https://github.com/dreamhead/moco).
 
 
 ### How to use
 
 Add dependency:
 ```sbt
-libraryDependencies += "com.github.nicholasren" % "moco-scala" % "0.0.1"
+libraryDependencies += "com.github.nicholasren" % "moco-scala" % "0.1-SNAPSHOT"
 ```
 
 Sample:
