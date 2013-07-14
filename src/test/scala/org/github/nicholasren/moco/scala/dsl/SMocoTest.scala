@@ -9,10 +9,14 @@ import com.google.common.io.ByteStreams
 
 class SMocoTest extends FunSuite with BeforeAndAfter {
 
+  var theServer: SMoco = null
+
+  before {
+    theServer = server(8080)
+  }
+
   test("should return expected response") {
-    val theServer = server(8080) {
-      default("bar")
-    }
+    theServer record (default("bar"))
 
     running(theServer) {
       assert(get(root) === "bar")
@@ -20,19 +24,21 @@ class SMocoTest extends FunSuite with BeforeAndAfter {
   }
 
   test("should return expected response based on specified request uri") {
-    val theServer = server(8080) {
-      when(uri -> "/foo") then "bar"
-    }
+    theServer record (
+      when(uri -> "/foo") then "bar",
+      when(uri -> "/hello") then "world"
+    )
 
     running(theServer) {
       assert(get(remoteUrl("/foo")) === "bar")
+      assert(get(remoteUrl("/hello")) === "world")
     }
   }
 
   test("should return expected response based on specified request method") {
-    val theServer = server(8080) {
+    theServer record (
       when(method -> "GET") then "foo"
-    }
+    )
 
     running(theServer) {
       assert(get(root) === "foo")
@@ -41,9 +47,9 @@ class SMocoTest extends FunSuite with BeforeAndAfter {
   }
 
   test("should return expected response based on path resource") {
-    val theServer = server(8080) {
+    theServer record (
       when(pathResource -> "foo.request") then "bar"
-    }
+    )
 
     running(theServer) {
       val asStream = this.getClass().getClassLoader().getResourceAsStream("foo.request");
@@ -53,11 +59,9 @@ class SMocoTest extends FunSuite with BeforeAndAfter {
   }
 
   test("should return expected response from file") {
-    val theServer = server(8080) {
-      default(
-        file("src/test/resources/bar.response")
-      )
-    }
+    theServer record (
+      default(file("src/test/resources/bar.response"))
+    )
 
     running(theServer) {
       assert(get(root) === "bar")
@@ -65,11 +69,10 @@ class SMocoTest extends FunSuite with BeforeAndAfter {
   }
 
   test("should match request based on multiple matchers with AND operator") {
-    val theServer = server(8080) {
-      when(
-        uri -> "/foo" and method -> "GET"
-      ) then "bar"
-    }
+    theServer record (
+      when(uri -> "/foo" and method -> "GET")
+        then "bar"
+    )
 
     running(theServer) {
       assert(get(remoteUrl("/foo")) === "bar")
@@ -78,11 +81,9 @@ class SMocoTest extends FunSuite with BeforeAndAfter {
   }
 
   test("should match request based on multiple matchers with OR operator") {
-    val theServer = server(8080) {
-      when(
-        uri -> "/foo" or method -> "GET"
-      ) then "bar"
-    }
+    theServer record (
+      when(uri -> "/foo" or method -> "GET") then "bar"
+    )
 
     running(theServer) {
       assert(get(root) === "bar") //method matched
@@ -92,9 +93,9 @@ class SMocoTest extends FunSuite with BeforeAndAfter {
   }
 
   test("should match put method via api") {
-    val theServer = server(8080) {
+    theServer record (
       when(method -> "PUT") then "bar"
-    }
+    )
 
     running(theServer) {
       assert(put(root) === "bar")
@@ -102,25 +103,24 @@ class SMocoTest extends FunSuite with BeforeAndAfter {
   }
 
   test("should match delete method via api") {
-    val theServer = server(8080) {
+    theServer record (
       when(method -> "DELETE") then "bar"
-    }
+    )
 
     running(theServer) {
       assert(delete(root) === "bar")
     }
   }
 
-  test("should return content one by one") {
-    val theServer = server(8080) {
-      when(uri -> "/foo") then seq("first", "second", "third")
-    }
+  test("should return resource one by one") {
+    theServer record (
+      when(uri -> "/foo") then ("first", "second", "third")
+    )
 
     running(theServer) {
       assert(get(remoteUrl("/foo")) === "first")
       assert(get(remoteUrl("/foo")) === "second")
       assert(get(remoteUrl("/foo")) === "third")
     }
-
   }
 }
