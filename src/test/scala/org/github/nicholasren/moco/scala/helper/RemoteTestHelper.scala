@@ -1,16 +1,20 @@
 package org.github.nicholasren.moco.scala.helper
 
 import org.apache.http.client.fluent.Request
+import scala.Predef.String
+import java.lang.String
+import scala.Predef.String
+import org.apache.http.message.BasicNameValuePair
 
 object RemoteTestHelper {
 
   def defaultPort = 8080
 
-  def get(uri: String): String = {
+  def sendGet(uri: String): String = {
     Request.Get(uri).execute().returnContent().asString
   }
 
-  def post(uri: String, content: String): String = {
+  def sendPost(uri: String, content: String): String = {
     postBytes(uri, content.getBytes())
   }
 
@@ -36,6 +40,18 @@ object RemoteTestHelper {
     }
 
     request.execute().returnResponse().getStatusLine.getStatusCode
+  }
+
+  def requestWithHeader(name: String, value: String) = {
+    Request.Get(root).addHeader(name, value).execute().returnContent().asString
+  }
+
+  def requestWithCookie(name: String, value: String) = {
+    Request.Post(root)
+  }
+
+  def postForm(name: String, value: String): String = {
+    Request.Post(root).bodyForm(new BasicNameValuePair(name, value)).execute().returnContent().asString()
   }
 
 

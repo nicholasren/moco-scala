@@ -2,10 +2,10 @@ package org.github.nicholasren.moco.scala.dsl
 
 import com.github.dreamhead.moco.{ResponseHandler, Moco, RequestMatcher}
 import com.github.dreamhead.moco.internal.{ActualHttpServer, MocoHttpServer}
-import com.github.dreamhead.moco.resource.{TextResource, FileResource, Resource}
+import com.github.dreamhead.moco.resource.Resource
 import com.github.dreamhead.moco.handler.ResponseHandlers._
 import scala.Option
-
+import org.github.nicholasren.moco.scala.dsl.RequestMatcherBuilder._
 
 class SMoco(port: Int) {
   type Rule = (Option[RequestMatcher], ResponseHandler)
@@ -54,10 +54,11 @@ object SMoco {
 
   def default(texts: String*) = whenDefault.then(texts: _*)
 
+  def post(matcher: RequestMatcher) = new When(Some(matcher and method -> "post"))
 
-  def file(name: String) = Moco.file(name)
+  def get(theUri: String) = new When(Some(uri -> theUri and method -> "get"))
 
-  implicit def stringToResource(string: String): TextResource = Moco.text(string)
+
 
   private
   def whenDefault = new When(None)
