@@ -23,6 +23,17 @@ class SMocoTest extends FunSuite with BeforeAndAfter {
     }
   }
 
+  test("should return default response when not rules are matched") {
+    theServer record (
+      when(uri -> "/foo") then "bar",
+      default("hello")
+    )
+
+    running(theServer) {
+      assert(get(root) === "hello")
+    }
+  }
+
   test("should return expected response based on specified request uri") {
     theServer record (
       when(uri -> "/foo") then "bar",

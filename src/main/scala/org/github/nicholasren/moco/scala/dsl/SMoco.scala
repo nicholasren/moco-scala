@@ -12,9 +12,9 @@ class SMoco(port: Int) {
 
   val server = com.github.dreamhead.moco.Moco.httpserver(port)
 
-  def record(configs: Rule*) {
-    configs.foreach(config => {
-      val (matcher, responseHandler) = config
+  def record(rules: Rule*) {
+    rules.foreach(rule => {
+      val (matcher, responseHandler) = rule
       matcher match {
         case Some(_) => server.request(matcher.get).response(responseHandler)
         case _ => server.response(responseHandler)
