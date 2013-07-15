@@ -4,6 +4,32 @@ Moco mainly focuses on server configuration. There are only two kinds of API rig
 That means if we get the expected request and then return our response. Now, you can see a Moco reference in details.
 
 
+## Server
+If you want to create a server listing on port `8080`:
+
+```scala
+val theServer = server(8080)
+```
+
+## Record Behavior
+If you want to record behavior for the created server:
+
+```scala
+theServer record (
+    when(uri -> "/foo") then "bar"
+)
+```
+
+### multiple behaviors
+you could supply multiple behaviors for your server
+
+```scala
+theServer record (
+    when(uri -> "/foo") then "bar",
+    when(uri -> "/hello") then "world"
+)
+```
+
 ## Request
 
 ### Content
@@ -17,7 +43,7 @@ when(content -> "foo") then "bar"
 If request content is too large, you can put it in a file:
 
 ```scala
-when(file -> "path/to/file") then "bar"
+when(content -> file("path/to/your/file")) then "bar"
 
 ```
 
@@ -32,7 +58,7 @@ when(uri -> "/foo") then "bar"
 Sometimes, your request has parameters:
 
 ```scala
-//WIP
+when(param("foo") -> "bar") then "bar"
 ```
 
 ### HTTP method
@@ -55,34 +81,32 @@ when(method -> "delete") then "bar"
 We can return different response for different HTTP version:
 
 ```scala
-//WIP
+when(version -> "HTTP/1.1") then "1.1",
 ```
 
 ### Header
 We will focus HTTP header at times:
 
 ```scala
-//WIP
-when (header -> "foo" -> "bar") then "blah"
+when(header("foo") -> "bar") then "blah"
 ```
 
 ### Combined matcher
 You can combine multiple matcher with `and` or `or` method in the `when` clause
 
 ```scala
-when(uri -> "/foo"
-        and method -> "get"
-) then "bar"
+when(uri -> "/foo" and method -> "get") then "bar"
 
-when(uri -> "/foo"
-        or method -> "get"
-) then "bar"
+when(uri -> "/foo"or method -> "get") then "bar"
 ```
 
 ### Cookie(WIP)
 
-### Form(WIP)
-
+### Form
+In web development, form is often used to submit information to server side.
+```scala
+post(form("name") -> "foo") then "bar"
+```
 ### XML(WIP)
 
 ### XPath(WIP)
@@ -91,24 +115,22 @@ when(uri -> "/foo"
 Json is rising with RESTful style architecture. Just like XML, in the most case, only JSON structure is important, so `json` operator can be used.
 
 
-### match(WIP)
-
 ## Response
 
-### Content(WIP)
+### Content
 
 As you have seen in previous example, response with content is pretty easy.
 if you want to return same response for all requests, you can use `default`
 
 ```scala
-default "bar"
+default("bar")
 ```
 
 The same as request, you can response with a file if content is too large to put in a string.
 
 
 ```scala
-default file("path/to/your/file")
+default(file("path/to/your/file"))
 ```
 
 ### Status Code(WIP)
@@ -118,7 +140,6 @@ Moco also supports HTTP status code response.
 ### Version(WIP)
 
 By default, response HTTP version is supposed to request HTTP version, but you can set your own HTTP version:
-
 
 ### Header(WIP)
 
@@ -130,6 +151,16 @@ By default, response HTTP version is supposed to request HTTP version, but you c
 
 ### Latency(WIP)
 
-### Sequence(WIP)
+### Sequence
+Sometimes, we want to simulate a real-world operation which change server side resource. For example:
+* First time you request a resource and "foo" is returned
+* We update this resource
+* Again request the same URL, updated content, e.g. "bar" is expected.
 
+We can do that by
+```scala
+theServer record (
+    when(uri -> "/foo") then seq("first", "second", "third")
+)
+```
 ### Mount(WIP)

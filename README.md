@@ -11,18 +11,31 @@ Add dependency:
 libraryDependencies += "com.github.nicholasren" % "moco-scala" % "0.1-SNAPSHOT"
 ```
 
-Sample:
+### Sample:
+
+#### import dependencies
 ```scala
-//create server and configure
-val theServer = server(8080) {
+import org.github.nicholasren.moco.scala.dsl.SMoco._
+```
+
+#### create server
+```scala
+val theServer = server(8080)
+```
+
+#### record behaviour
+```scala
+theServer record {
     when(uri -> "/bar") then "foo"
 }
+```
 
+#### running server and test your stuff
 
-//running the created server
+```scala
 running(theServer) {
     //testing your stuff
 }
 ```
 
-for detail, please find in the [API reference](doc/api.md)
+for detail api, please find in the [API reference](doc/api.md)

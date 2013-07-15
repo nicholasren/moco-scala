@@ -3,9 +3,6 @@ package org.github.nicholasren.moco.scala.dsl
 import org.scalatest.{FunSpec, BeforeAndAfter}
 
 import SMoco._
-import RequestMatcherBuilder._
-import SResource._
-
 import com.google.common.io.ByteStreams
 import java.lang.String
 import org.apache.http.client.fluent.Request
@@ -13,7 +10,7 @@ import org.apache.http.HttpVersion
 import org.github.nicholasren.moco.scala.helper.RemoteTestHelper._
 
 class SMocoTest extends FunSpec with BeforeAndAfter {
-  var theServer: SMoco = null
+  var theServer: SMoco = server(8080)
 
   before {
     theServer = server(8080)
@@ -214,7 +211,7 @@ class SMocoTest extends FunSpec with BeforeAndAfter {
 
       it("one by one") {
         theServer record (
-          default ("first", "second", "third")
+          default(seq("first", "second", "third"))
         )
 
         running(theServer) {
