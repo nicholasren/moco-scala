@@ -4,18 +4,25 @@ moco-scala
 This is a scala wrapper for [moco](https://github.com/dreamhead/moco).
 
 
+
 ### How to use
 
 Add dependency:
 ```sbt
-libraryDependencies += "com.github.nicholasren" % "moco-scala" % "0.1-SNAPSHOT"
+libraryDependencies += "com.github.nicholasren" % "moco-scala_2.10" % "0.1-SNAPSHOT"
+```
+### Try latest version
+if you want to try latest version, just add snapshot repo to dependency resolver
+
+```scala
+resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
 ```
 
-### Sample:
+### Example:
 
 #### import dependencies
 ```scala
-import org.github.nicholasren.moco.scala.dsl.SMoco._
+import com.github.nicholasren.moco.scala.dsl.SMoco._
 ```
 
 #### create server

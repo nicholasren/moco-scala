@@ -1,4 +1,4 @@
-package org.github.nicholasren.moco.scala.dsl
+package com.github.nicholasren.moco.scala.dsl
 
 import com.github.dreamhead.moco.{ResponseHandler, Moco, RequestMatcher}
 import com.github.dreamhead.moco.internal.{ActualHttpServer, MocoHttpServer}

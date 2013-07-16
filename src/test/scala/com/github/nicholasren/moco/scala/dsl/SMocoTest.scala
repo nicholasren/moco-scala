@@ -1,4 +1,4 @@
-package org.github.nicholasren.moco.scala.dsl
+package com.github.nicholasren.moco.scala.dsl
 
 import org.scalatest.{FunSpec, BeforeAndAfter}
 
