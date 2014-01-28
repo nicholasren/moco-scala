@@ -18,7 +18,7 @@ object RemoteTestHelper {
     postBytes(uri, content.getBytes())
   }
 
-  def put(uri: String) = {
+  def doPut(uri: String) = {
     Request.Put(uri).execute().returnContent().toString()
   }
 
