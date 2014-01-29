@@ -52,66 +52,15 @@ object SMoco {
     finally server.stop
   }
 
-  def when(matcher: RequestMatcher) = new When(Some(matcher))
-
-  def default(resource: Resource) = whenDefault.then(responseHandler(resource))
-
-  def default(handler: ResponseHandler) = whenDefault.then(handler)
-
 //  def post(matcher: RequestMatcher) = new When(Some(enrich(matcher) and method -> "post"))
 
   def get(theUri: String)(content: => String)(implicit smoco: SMoco) = {
     smoco.server.request(Moco.by(Moco.uri(theUri))).response(content)
   }
 
-  def put(theUri: String)(content: => String)(implicit smoco: SMoco) = {
-    smoco.server.request(Moco.by(Moco.uri(theUri))).response(content)
+  def put(theUri: String)(callback: => String)(implicit smoco: SMoco) = {
+    import Moco._
+    smoco.server.request(and(by(uri(theUri)), by(method("put")))).response(callback)
   }
-
-  //recourse related dsl
-  def file(name: String) = Moco.file(name)
-
-  def seq(values: String*) = Moco.seq(values.map(Moco.text(_)): _*)
-
-  //request matcher builder
-  def uri = new RequestMatcherBuilder {
-
-    def ->(value: String): RequestMatcher = Moco.by(Moco.uri(value))
-  }
-
-  def method = new RequestMatcherBuilder {
-    def ->(value: String): RequestMatcher = Moco.by(Moco.method(value))
-  }
-
-  def pathResource = new RequestMatcherBuilder {
-    def ->(value: String): RequestMatcher = Moco.by(Moco.pathResource(value))
-  }
-
-  def content = new RequestMatcherBuilder {
-    def ->(value: String): RequestMatcher = Moco.by(Moco.text(value))
-  }
-
-  def param(name: String) = new RequestMatcherBuilder {
-    def ->(value: String): RequestMatcher = Moco.eq(Moco.query(name), value)
-  }
-
-  def version = new RequestMatcherBuilder {
-    def ->(value: String): RequestMatcher = Moco.by(Moco.version(value))
-  }
-
-  def header(name: String) = new RequestMatcherBuilder {
-    def ->(value: String): RequestMatcher = Moco.eq(Moco.header(name), value)
-  }
-
-  def cookie(name: String) = new RequestMatcherBuilder {
-    def ->(value: String): RequestMatcher = ???
-  }
-
-  def form(name: String) = new RequestMatcherBuilder {
-    def ->(value: String): RequestMatcher = Moco.eq(Moco.form(name), value)
-  }
-
-  private
-  def whenDefault = new When(None)
 }
 

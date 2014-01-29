@@ -3,26 +3,19 @@ package com.github.nicholasren.moco.scala.dsl
 import org.scalatest.{FunSpec, BeforeAndAfter}
 
 import SMoco._
-import com.google.common.io.ByteStreams
-import java.lang.String
-import org.apache.http.client.fluent.Request
-import org.apache.http.HttpVersion
 import org.github.nicholasren.moco.scala.helper.RemoteTestHelper._
 
 class SMocoTest extends FunSpec with BeforeAndAfter {
   implicit val theServer: SMoco = server(8080)
 
-  describe("moco server"){
-    describe("should return expected response"){
+  describe("moco server") {
+    describe("should return expected response") {
       it("respond to get") {
 
         theServer {
-
           get("/foo") { "bar" }
-
           get("/hello") { "world" }
         }
-
 
         running {
           assert(sendGet(remoteUrl("/foo")) === "bar")
