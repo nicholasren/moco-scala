@@ -34,7 +34,7 @@ object RemoteTestHelper {
 
   def statusCode(method: String, uri: String) = {
 
-    val request = method match {
+    val request = method.toUpperCase() match {
       case "GET" => Request.Get(uri)
       case "POST" => Request.Post(uri)
     }
