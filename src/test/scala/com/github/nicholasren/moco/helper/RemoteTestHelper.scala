@@ -1,4 +1,4 @@
-package org.github.nicholasren.moco.scala.helper
+package org.github.nicholasren.moco.helper
 
 import org.apache.http.client.fluent.Request
 import scala.Predef.String
@@ -10,11 +10,11 @@ object RemoteTestHelper {
 
   def defaultPort = 8080
 
-  def sendGet(uri: String): String = {
+  def get(uri: String): String = {
     Request.Get(uri).execute().returnContent().asString
   }
 
-  def sendPost(uri: String, content: String): String = {
+  def post(uri: String, content: String): String = {
     postBytes(uri, content.getBytes())
   }
 
@@ -27,22 +27,15 @@ object RemoteTestHelper {
   }
 
   def postBytes(uri: String, bytes: Array[Byte]) = {
-    val content = Request.Post(uri).bodyByteArray(bytes)
-      .execute().returnContent();
-    content.asString();
+    Request.Post(uri).bodyByteArray(bytes)
+      .execute().returnContent().asString();
   }
 
-  def statusCode(method: String, uri: String) = {
-
-    val request = method.toUpperCase() match {
-      case "GET" => Request.Get(uri)
-      case "POST" => Request.Post(uri)
-    }
-
-    request.execute().returnResponse().getStatusLine.getStatusCode
+  def getForStatus(uri: String) = {
+    Request.Get(uri).execute().returnResponse().getStatusLine.getStatusCode
   }
 
-  def requestWithHeaders(headers: Tuple2[String, String]*) = {
+  def requestWithHeaders(headers: (String, String)*) = {
     val get: Request = Request.Get(root)
 
     headers.foreach { header =>
@@ -56,6 +49,9 @@ object RemoteTestHelper {
     Request.Post(root).bodyForm(new BasicNameValuePair(name, value)).execute().returnContent().asString()
   }
 
+  def getForHeader(headerName: String): String = {
+    Request.Get(root).execute.returnResponse.getFirstHeader(headerName).getValue
+  }
 
   def root: String = {
     "http://localhost:" + defaultPort

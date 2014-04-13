@@ -24,6 +24,12 @@ resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repos
 ```scala
 import com.github.nicholasren.moco.scala.dsl.SMoco._
 ```
+#### import conversion
+to combine request matchers and response handlers, you need to import conversions.
+
+```scala
+import com.github.nicholasren.moco.dsl.Conversions._
+```
 
 #### create server
 ```scala
@@ -33,16 +39,18 @@ val theServer = server(8080)
 #### record behaviour
 ```scala
 theServer record {
-    when(uri -> "/bar") then "foo"
+    when {
+        //...
+    } then {
+
+    }
 }
 ```
 
 #### running server and test your stuff
 
 ```scala
-running(theServer) {
+theServer running  {
     //testing your stuff
 }
 ```
-
-for detail api, please find in the [API reference](doc/api.md)
