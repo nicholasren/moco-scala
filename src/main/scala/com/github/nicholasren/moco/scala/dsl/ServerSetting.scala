@@ -2,71 +2,96 @@ package com.github.nicholasren.moco.scala.dsl
 
 import com.github.dreamhead.moco.{ResponseHandler, Moco, RequestMatcher}
 import com.github.dreamhead.moco.internal.{ActualHttpServer, MocoHttpServer}
-import com.github.dreamhead.moco.resource.{TextResource, Resource}
-import com.github.dreamhead.moco.handler.ResponseHandlers._
-import scala.Option
-import com.github.dreamhead.moco.handler.ContentHandler
+import com.github.dreamhead.moco.resource.Resource
 import com.github.dreamhead.moco.matcher.AndRequestMatcher
-import scala.collection.JavaConversions._
 import com.github.dreamhead.moco.handler.AndResponseHandler
-import com.github.dreamhead.moco.handler.StatusCodeResponseHandler
 import com.github.dreamhead.moco.handler.ResponseHandlers
-import com.github.dreamhead.moco.Moco._
+
+import scala.collection.JavaConversions._
+
+case class Rule(matchers: List[RequestMatcher], handlers: List[ResponseHandler])
+
+class PartialRule(matchers: List[RequestMatcher]) {
+
+  def then(responses: Any*): Rule = {
+    val handlers = responses.map {
+      _ match {
+        case resource: Resource => ResponseHandlers.responseHandler(resource)
+        case handler: ResponseHandler => handler
+      }
+    }
+
+    new Rule(this.matchers, handlers.toList)
+  }
+}
 
 class ServerSetting(port: Int) {
-  type Rule = (List[RequestMatcher], List[ResponseHandler])  
 
   val server = com.github.dreamhead.moco.Moco.httpserver(port)
-  var rules: List[Rule] = List[Rule]()
 
   def running(testFun: => Unit) = {
-    replay
     val theServer = new MocoHttpServer(server.asInstanceOf[ActualHttpServer])
     theServer.start
-    
-    try {  
+
+    try {
       testFun
     }
-    finally theServer.stop
+    finally {
+      theServer.stop
+    }
   }
-  
-  def when(matchers: RequestMatcher*) = new When(matchers.toList, this)
-  
-  private
-  def replay = {
+
+  def record(rules: List[Rule]) {
     rules.foreach(rule => {
-      val (matchers, handlers) = rule
-      val wrappedMatchers = new AndRequestMatcher(asJavaIterable(matchers))
-      val wrappedHandlers = new AndResponseHandler(asJavaIterable(handlers))
+      val wrappedMatchers = new AndRequestMatcher(rule.matchers)
+      val wrappedHandlers = new AndResponseHandler(rule.handlers)
+
       server.request(wrappedMatchers).response(wrappedHandlers)
     })
   }
-  
-  def record(rule: Rule) = {
-    this.rules = rule :: rules
-    this
-  }
 
-}
-
-class When(matchers: List[RequestMatcher], serverSetting: ServerSetting) {
-  def then(handlers: ResponseHandler*) =  {
-    serverSetting.record(matchers, handlers.toList)
+  def record(rule: Rule) {
+    record(List(rule))
   }
 }
+
 
 object SMoco {
 
   def server(port: Int) = new ServerSetting(port)
 
-  //matchers
-  def uri(value: String): RequestMatcher = by(Moco.uri(value))
-  
-  def method(value: String): RequestMatcher = by(Moco.method(value));
-  
+  def when(conditions: Any*) = {
+    val matchers = conditions.map {
+      condition => condition match {
+        case resource: Resource => Moco.by(resource)
+        case matcher: RequestMatcher => matcher
+      }
+    }
+
+    new PartialRule(matchers.toList)
+  }
+
+  //resources
+  def uri(value: String): Resource = Moco.uri(value)
+
+  def method(value: String): Resource = Moco.method(value)
+
+  def matched(value: Resource) = Moco.`match`(value)
+
+  def text(value: String): Resource = Moco.text(value)
+
+  //request matcher
+  def headers(headers: Tuple2[String, String]*): RequestMatcher = {
+    val matchers = headers.map {
+      header: Tuple2[String, String] =>
+        Moco.eq(Moco.header(header._1), header._2)
+    }
+    new AndRequestMatcher(matchers)
+  }
+
+
   //handlers
-  def text(value: String): ResponseHandler = ResponseHandlers.responseHandler(Moco.text(value))
-  
+
   def status(code: Int): ResponseHandler = Moco.status(code)
 }
 

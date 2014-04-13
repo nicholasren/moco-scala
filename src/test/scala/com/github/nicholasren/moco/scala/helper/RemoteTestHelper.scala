@@ -42,12 +42,14 @@ object RemoteTestHelper {
     request.execute().returnResponse().getStatusLine.getStatusCode
   }
 
-  def requestWithHeader(name: String, value: String) = {
-    Request.Get(root).addHeader(name, value).execute().returnContent().asString
-  }
+  def requestWithHeaders(headers: Tuple2[String, String]*) = {
+    val get: Request = Request.Get(root)
 
-  def requestWithCookie(name: String, value: String) = {
-    Request.Post(root)
+    headers.foreach { header =>
+      get.addHeader(header._1, header._2)
+    }
+
+    get.execute().returnContent().asString
   }
 
   def postForm(name: String, value: String): String = {
