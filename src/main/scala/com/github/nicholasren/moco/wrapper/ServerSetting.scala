@@ -22,7 +22,6 @@ class ServerSetting(port: Int) {
   }
 
   def record(rules: List[Rule]) {
-    server.getSettings.clear()
     rules.foreach(rule => {
       val wrappedMatchers = new AndRequestMatcher(rule.matchers)
       val wrappedHandlers = new AndResponseHandler(rule.handlers)

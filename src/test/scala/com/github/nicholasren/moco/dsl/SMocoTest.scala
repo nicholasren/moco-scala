@@ -11,7 +11,11 @@ import com.github.nicholasren.moco.wrapper.ServerSetting
 
 class SMocoTest extends FunSpec with BeforeAndAfter {
 
-  var theServer: ServerSetting = server(8080)
+  var theServer: ServerSetting = null
+
+  before {
+    theServer = server(8080)
+  }
 
   describe("moco server") {
     describe("matchers") {

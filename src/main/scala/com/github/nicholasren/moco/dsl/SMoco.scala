@@ -2,11 +2,9 @@ package com.github.nicholasren.moco.dsl
 
 import com.github.dreamhead.moco.resource.Resource
 import com.github.dreamhead.moco.{ResponseHandler, RequestMatcher, Moco}
-import com.github.dreamhead.moco.handler.{ResponseHandlers, SequenceContentHandler, AndResponseHandler}
+import com.github.dreamhead.moco.handler.{SequenceContentHandler, AndResponseHandler}
 import com.github.nicholasren.moco.wrapper.{ServerSetting, PartialRule, ExtractorMatcher}
 import scala.collection.JavaConversions._
-
-
 
 object SMoco {
 
@@ -44,7 +42,10 @@ object SMoco {
   //handlers
   def status(code: Int): ResponseHandler = Moco.status(code)
 
-  def seq(resources: Resource*): ResponseHandler = new SequenceContentHandler(resources.toArray)
+  def seq(resources: Resource*): ResponseHandler = {
+    val handlers = resources.map { resource => Moco.`with`(resource)}
+    new SequenceContentHandler(handlers.toArray)
+  }
 
   def headers(headers: (String, String)*): ResponseHandler = {
     val handlers = headers.map {

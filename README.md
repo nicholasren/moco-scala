@@ -40,9 +40,9 @@ val theServer = server(8080)
 ```scala
 theServer record {
     when {
-        //...
+        // request matcher
     } then {
-
+        // response handler
     }
 }
 ```
@@ -54,3 +54,7 @@ theServer running  {
     //testing your stuff
 }
 ```
+
+#### Usage
+
+Please refer to the [tests](https://github.com/nicholasren/moco-scala/blob/master/src/test/scala/com/github/nicholasren/moco/dsl/SMocoTest.scala)
