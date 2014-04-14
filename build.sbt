@@ -1,3 +1,6 @@
+import SonatypeKeys._
+sonatypeSettings
+
 name := "moco-scala"
 
 version := "0.2"
@@ -17,6 +20,7 @@ publishTo <<= version { v: String =>
   else
     Some("releases" at nexus + "service/local/staging/deploy/maven2")
 }
+
 
 organization := "com.github.nicholasren"
 
