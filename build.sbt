@@ -1,4 +1,5 @@
 import SonatypeKeys._
+
 sonatypeSettings
 
 name := "moco-scala"

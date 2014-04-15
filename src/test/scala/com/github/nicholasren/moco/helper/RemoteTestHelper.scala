@@ -5,6 +5,7 @@ import scala.Predef.String
 import java.lang.String
 import scala.Predef.String
 import org.apache.http.message.BasicNameValuePair
+import org.apache.http.HttpVersion
 
 object RemoteTestHelper {
 
@@ -35,7 +36,7 @@ object RemoteTestHelper {
     Request.Get(uri).execute().returnResponse().getStatusLine.getStatusCode
   }
 
-  def requestWithHeaders(headers: (String, String)*) = {
+  def getWithHeaders(headers: (String, String)*) = {
     val get: Request = Request.Get(root)
 
     headers.foreach { header =>
@@ -45,17 +46,29 @@ object RemoteTestHelper {
     get.execute().returnContent().asString
   }
 
-  def postForm(name: String, value: String): String = {
-    Request.Post(root).bodyForm(new BasicNameValuePair(name, value)).execute().returnContent().asString()
+  def getForStatusWithHeaders(headers: (String, String)*) = {
+    val get: Request = Request.Get(root)
+
+    headers.foreach { header =>
+      get.addHeader(header._1, header._2)
+    }
+
+    get.execute.returnResponse.getStatusLine.getStatusCode
   }
 
   def getForHeader(headerName: String): String = {
     Request.Get(root).execute.returnResponse.getFirstHeader(headerName).getValue
   }
 
+  def getWithVersion(url: String, version: HttpVersion) = get(Request.Get(url).version(version))
+
+
   def root: String = {
     "http://localhost:" + defaultPort
   }
 
   def remoteUrl(uri: String) = root + uri
+
+  private
+  def get(request: Request): String =  request.execute.returnContent.asString
 }

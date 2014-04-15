@@ -8,4 +8,6 @@ case class ExtractorMatcher(extractor: RequestExtractor[_ <: Any]) {
   def ===(expected: String) = Moco.eq(extractor, expected)
 
   def ===(expected: Resource) = Moco.eq(extractor, expected)
+
+  def matched(expected: String) = Moco.`match`(extractor, expected)
 }
