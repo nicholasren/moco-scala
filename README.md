@@ -78,13 +78,12 @@ when {
 ```
 #### Multiple responses
 ```scala
-theServer record {
-  when {
-    uri("/not-exits")
-  } then {
-    status(400) and text("BAD REQUEST")
-  }
+when {
+  uri("/not-exits")
+} then {
+  status(400) and text("BAD REQUEST")
 }
+
 ```
 
 #### Multiple behaviours
