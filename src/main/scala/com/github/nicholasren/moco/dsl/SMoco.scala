@@ -32,7 +32,7 @@ object SMoco {
 
   def file(filename: String): Resource = Moco.file(filename)
 
-  //ExtractorMatcher
+  //extractor matcher
   def header(name: String): ExtractorMatcher = new ExtractorMatcher(Moco.header(name))
 
   def query(name: String): ExtractorMatcher = new ExtractorMatcher(Moco.query(name))
