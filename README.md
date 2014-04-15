@@ -20,7 +20,7 @@ resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repos
 
 ###Quick Start:
 
-#### import dependencies
+#### Import dependencies
 ```scala
 import com.github.nicholasren.moco.scala.dsl.SMoco._
 ```
@@ -86,14 +86,16 @@ theServer record {
 ```
 #### Multiple responses
 ```scala
-when {
-  uri("/not-exits")
-} then {
-  status(400) and text("BAD REQUEST")
+theServer record {
+  when {
+    uri("/not-exits")
+  } then {
+    status(400) and text("BAD REQUEST")
+  }
 }
 ```
 
-#### Multiple requests
+#### Multiple behaviours
 
 ```scala
 theServer record {
