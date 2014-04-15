@@ -19,13 +19,12 @@ class ResponseHandlerTest extends FunSpec with BeforeAndAfter {
 
   describe("responses") {
     it("send text") {
-      theServer record {
-        when {
-          method("get")
-        } then {
-          text("get")
-        }
+      theServer when {
+        method("get")
+      } then {
+        text("get")
       }
+
 
       theServer running {
         assert(get(root) === "get")
@@ -33,13 +32,12 @@ class ResponseHandlerTest extends FunSpec with BeforeAndAfter {
     }
 
     it("send headers") {
-      theServer record {
-        when {
-          method("get")
-        } then {
-          headers("Content-Type" -> "json", "Accept" -> "html")
-        }
+      theServer when {
+        method("get")
+      } then {
+        headers("Content-Type" -> "json", "Accept" -> "html")
       }
+
 
       theServer running {
         assert(getForHeader("Content-Type") === "json")
@@ -48,13 +46,12 @@ class ResponseHandlerTest extends FunSpec with BeforeAndAfter {
     }
 
     it("send content in seq") {
-      theServer record {
-        when {
-          method("get")
-        } then {
-          seq("foo", "bar", "baz")
-        }
+      theServer when {
+        method("get")
+      } then {
+        seq("foo", "bar", "baz")
       }
+
 
       theServer running {
         assert(get(root) === "foo")
@@ -64,13 +61,12 @@ class ResponseHandlerTest extends FunSpec with BeforeAndAfter {
     }
 
     it("send multi response handler") {
-      theServer record {
-        when {
-          method("get")
-        } then {
-          status(201) and text("hello")
-        }
+      theServer when {
+        method("get")
+      } then {
+        status(201) and text("hello")
       }
+
 
       theServer running {
         assert(getForStatus(root) === 201)
@@ -79,12 +75,10 @@ class ResponseHandlerTest extends FunSpec with BeforeAndAfter {
     }
 
     it("send version") {
-      theServer record {
-        when {
-          method("get")
-        } then {
-          version("HTTP/1.0")
-        }
+      theServer when {
+        method("get")
+      } then {
+        version("HTTP/1.0")
       }
 
       theServer running {

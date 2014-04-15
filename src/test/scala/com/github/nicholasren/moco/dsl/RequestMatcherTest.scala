@@ -17,13 +17,12 @@ class RequestMatcherTest extends FunSpec with BeforeAndAfter {
   describe("matchers") {
 
     it("match by uri") {
-      theServer record {
-        when {
-          uri("/hello") and method("post")
-        } then {
-          status(200) and text("world")
-        }
+      theServer when {
+        uri("/hello") and method("post")
+      } then {
+        status(200) and text("world")
       }
+
 
       theServer running {
         assert(getForStatus(remoteUrl("/hello")) === 400)
@@ -32,13 +31,12 @@ class RequestMatcherTest extends FunSpec with BeforeAndAfter {
     }
 
     it("match uri by regex") {
-      theServer record {
-        when {
-          uri matched "/hello.+"
-        } then {
-          text("world")
-        }
+      theServer when {
+        uri matched "/hello.+"
+      } then {
+        text("world")
       }
+
 
       theServer running {
         assert(get(remoteUrl("/hello123")) === "world")
@@ -47,13 +45,12 @@ class RequestMatcherTest extends FunSpec with BeforeAndAfter {
     }
 
     it("match header by regex") {
-      theServer record {
-        when {
-          header("Content-Type") matched ".+json"
-        } then {
-          text("headers matched")
-        }
+      theServer when {
+        header("Content-Type") matched ".+json"
+      } then {
+        text("headers matched")
       }
+
 
       theServer running {
         assert(getWithHeaders("Content-Type" -> "application/json") === "headers matched")
@@ -62,12 +59,10 @@ class RequestMatcherTest extends FunSpec with BeforeAndAfter {
     }
 
     it("match text by regex") {
-      theServer record {
-        when {
-          text matched "hello.+"
-        } then {
-          text("text matched")
-        }
+      theServer when {
+        text matched "hello.+"
+      } then {
+        text("text matched")
       }
 
       theServer running {
@@ -78,13 +73,12 @@ class RequestMatcherTest extends FunSpec with BeforeAndAfter {
     }
 
     it("match by method") {
-      theServer record {
-        when {
-          method("get")
-        } then {
-          text("get")
-        }
+      theServer when {
+        method("get")
+      } then {
+        text("get")
       }
+
 
       theServer running {
         assert(get(root) === "get")
@@ -92,12 +86,10 @@ class RequestMatcherTest extends FunSpec with BeforeAndAfter {
     }
 
     it("match by headers") {
-      theServer record {
-        when {
-          header("Content-Type") === "content-type"
-        } then {
-          text("headers matched")
-        }
+      theServer when {
+        header("Content-Type") === "content-type"
+      } then {
+        text("headers matched")
       }
 
       theServer running {
@@ -106,12 +98,10 @@ class RequestMatcherTest extends FunSpec with BeforeAndAfter {
     }
 
     it("match by version") {
-      theServer record {
-        when {
-          version("HTTP/1.0")
-        } then {
-          text("version matched")
-        }
+      theServer when {
+        version("HTTP/1.0")
+      } then {
+        text("version matched")
       }
 
       theServer running {
@@ -120,19 +110,14 @@ class RequestMatcherTest extends FunSpec with BeforeAndAfter {
     }
 
     it("can define multi matchers") {
-      theServer record {
-        List(
-          when {
-            method("get")
-          } then {
-            text("get")
-          },
-          when {
-            method("post")
-          } then {
-            text("post")
-          }
-        )
+      theServer when {
+        method("get")
+      } then {
+        text("get")
+      } when {
+        method("post")
+      } then {
+        text("post")
       }
 
       theServer running {

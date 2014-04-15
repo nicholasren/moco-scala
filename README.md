@@ -32,13 +32,7 @@ val theServer = server(8080)
 
 #### Record behaviour
 ```scala
-theServer record {
-    when {
-        uri("/hello")
-    } then {
-        status(200)
-    }
-}
+theServer when { uri("/hello") } then { status(200) }
 ```
 
 #### Running server and test your stuff
@@ -75,12 +69,10 @@ import com.github.nicholasren.moco.dsl.Conversions._
 #### Multiple matchers
 
 ```scala
-theServer record {
-  when {
-    uri("/hello") and method("post")
-  } then {
-    text("world")
-  }
+when {
+  uri("/hello") and method("post")
+} then {
+  text("world")
 }
 
 ```
@@ -98,19 +90,14 @@ theServer record {
 #### Multiple behaviours
 
 ```scala
-theServer record {
-  List(
-    when {
-      method("get")
-    } then {
-      text("get")
-    },
-    when {
-      method("post")
-    } then {
-      text("post")
-    }
-  )
+when {
+  method("get")
+} then {
+  text("get")
+} when {
+  method("post")
+} then {
+  text("post")
 }
 ```
 for more usage, please refer to [tests](https://github.com/nicholasren/moco-scala/blob/master/src/test/scala/com/github/nicholasren/moco/dsl/SMocoTest.scala) or refer to [moco's api doc](https://github.com/dreamhead/moco/blob/master/moco-doc/apis.md).
