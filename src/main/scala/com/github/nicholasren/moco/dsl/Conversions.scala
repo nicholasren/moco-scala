@@ -2,7 +2,7 @@ package com.github.nicholasren.moco.dsl
 
 import com.github.dreamhead.moco.resource.Resource
 import com.github.dreamhead.moco.{ResponseHandler, RequestMatcher, Moco}
-import com.github.dreamhead.moco.handler.{AndResponseHandler, ResponseHandlers}
+import com.github.dreamhead.moco.handler.AndResponseHandler
 import com.github.dreamhead.moco.matcher.AndRequestMatcher
 import scala.collection.JavaConversions._
 
@@ -12,7 +12,7 @@ object Conversions {
 
   implicit def toMatcher(resource: Resource): RequestMatcher = Moco.`match`(resource)
 
-  implicit def toHandler(resource: Resource): ResponseHandler = ResponseHandlers.responseHandler(resource)
+  implicit def toHandler(resource: Resource): ResponseHandler = Moco.`with`(resource)
 
   implicit class RichResource(target: Resource) {
     def and(handler: ResponseHandler): ResponseHandler = new AndResponseHandler(Seq[ResponseHandler](handler, target))
