@@ -6,7 +6,9 @@ name := "moco-scala"
 
 version := "0.2"
 
-scalaVersion := "2.10.1"
+scalaVersion := "2.11.4"
+
+crossScalaVersions := Seq("2.10.2", "2.11.4")
 
 libraryDependencies += "com.github.dreamhead" % "moco-core" % "0.9.1"
 
