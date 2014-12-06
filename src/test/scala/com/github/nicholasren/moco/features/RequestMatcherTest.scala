@@ -1,10 +1,10 @@
-package com.github.nicholasren.moco.dsl
+package com.github.nicholasren.moco.features
 
 import org.scalatest.{BeforeAndAfter, FunSpec}
 import org.apache.http.HttpVersion
-import SMoco._
-import Conversions._
 import org.github.nicholasren.moco.helper.RemoteTestHelper
+import com.github.nicholasren.moco.dsl.SMoco
+import com.github.nicholasren.moco.dsl.SMoco._
 
 class RequestMatcherTest extends FunSpec with BeforeAndAfter with RemoteTestHelper {
 
@@ -44,6 +44,19 @@ class RequestMatcherTest extends FunSpec with BeforeAndAfter with RemoteTestHelp
         assert(get(remoteUrl("/hello123")) === "world")
         assert(get(remoteUrl("/hello-abc")) === "world")
       }
+    }
+
+    it("match by query parameters") {
+      theServer when {
+        query("foo") === "bar"
+      } then {
+        text("bar")
+      }
+
+      theServer running {
+        assert(get(remoteUrl("/hello?foo=bar")) === "bar")
+      }
+
     }
 
     it("match header by regex") {

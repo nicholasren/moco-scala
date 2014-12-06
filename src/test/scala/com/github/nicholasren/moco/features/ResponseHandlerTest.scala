@@ -1,12 +1,12 @@
-package com.github.nicholasren.moco.dsl
+package com.github.nicholasren.moco.features
 
 import org.scalatest.{FunSpec, BeforeAndAfter}
 
-import SMoco._
-import Conversions._
 
 import org.apache.http.client.fluent.Request
 import org.github.nicholasren.moco.helper.RemoteTestHelper
+import com.github.nicholasren.moco.dsl.SMoco
+import com.github.nicholasren.moco.dsl.SMoco._
 
 
 class ResponseHandlerTest extends FunSpec with BeforeAndAfter with RemoteTestHelper {
@@ -88,6 +88,19 @@ class ResponseHandlerTest extends FunSpec with BeforeAndAfter with RemoteTestHel
 
         assert(version.getMajor === 1)
         assert(version.getMinor === 0)
+      }
+    }
+
+
+    it("send response from file") {
+      theServer when {
+        method("get")
+      } then {
+        file("bar.response")
+      }
+
+      theServer running {
+        assert(get(root) === "bar")
       }
     }
   }
