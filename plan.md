@@ -41,3 +41,10 @@ running {
   //interact with server and expect result
 }
 ```
+
+======HERE========
+### support config
+    - config file root
+    - config context
+
+### separating unit tests and functional tests
