@@ -1,17 +1,19 @@
 package com.github.nicholasren.moco.dsl
 
 import org.scalatest.{BeforeAndAfter, FunSpec}
-import org.github.nicholasren.moco.helper.RemoteTestHelper._
 import org.apache.http.HttpVersion
 import SMoco._
 import Conversions._
+import org.github.nicholasren.moco.helper.RemoteTestHelper
 
-class RequestMatcherTest extends FunSpec with BeforeAndAfter {
+class RequestMatcherTest extends FunSpec with BeforeAndAfter with RemoteTestHelper {
+
+  val port = 8081
 
   var theServer: SMoco = null
 
   before {
-    theServer = server(8080)
+    theServer = server(port)
   }
 
   describe("matchers") {

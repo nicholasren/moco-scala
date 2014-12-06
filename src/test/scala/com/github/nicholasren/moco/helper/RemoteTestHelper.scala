@@ -7,9 +7,9 @@ import scala.Predef.String
 import org.apache.http.message.BasicNameValuePair
 import org.apache.http.HttpVersion
 
-object RemoteTestHelper {
+trait RemoteTestHelper {
 
-  def defaultPort = 8080
+  val port: Int
 
   def get(uri: String): String = {
     Request.Get(uri).execute().returnContent().asString
@@ -64,7 +64,7 @@ object RemoteTestHelper {
 
 
   def root: String = {
-    "http://localhost:" + defaultPort
+    s"http://localhost:$port"
   }
 
   def remoteUrl(uri: String) = root + uri

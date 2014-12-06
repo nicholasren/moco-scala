@@ -5,16 +5,18 @@ import org.scalatest.{FunSpec, BeforeAndAfter}
 import SMoco._
 import Conversions._
 
-import org.github.nicholasren.moco.helper.RemoteTestHelper._
 import org.apache.http.client.fluent.Request
+import org.github.nicholasren.moco.helper.RemoteTestHelper
 
 
-class ResponseHandlerTest extends FunSpec with BeforeAndAfter {
+class ResponseHandlerTest extends FunSpec with BeforeAndAfter with RemoteTestHelper {
 
   var theServer: SMoco = null
 
+  val port = 8080
+
   before {
-    theServer = server(8080)
+    theServer = server(port)
   }
 
   describe("responses") {
