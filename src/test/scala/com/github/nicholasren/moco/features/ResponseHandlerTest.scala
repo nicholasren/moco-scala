@@ -7,6 +7,7 @@ import org.apache.http.client.fluent.Request
 import org.github.nicholasren.moco.helper.RemoteTestHelper
 import com.github.nicholasren.moco.dsl.SMoco
 import com.github.nicholasren.moco.dsl.SMoco._
+import com.github.nicholasren.moco.dsl.Conversions._
 
 
 class ResponseHandlerTest extends FunSpec with BeforeAndAfter with RemoteTestHelper {
@@ -88,19 +89,6 @@ class ResponseHandlerTest extends FunSpec with BeforeAndAfter with RemoteTestHel
 
         assert(version.getMajor === 1)
         assert(version.getMinor === 0)
-      }
-    }
-
-
-    it("send response from file") {
-      theServer when {
-        method("get")
-      } then {
-        file("bar.response")
-      }
-
-      theServer running {
-        assert(get(root) === "bar")
       }
     }
   }

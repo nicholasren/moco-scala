@@ -1,10 +1,12 @@
 package com.github.nicholasren.moco.features
 
 import org.scalatest.{BeforeAndAfter, FunSpec}
+
 import org.apache.http.HttpVersion
 import org.github.nicholasren.moco.helper.RemoteTestHelper
 import com.github.nicholasren.moco.dsl.SMoco
 import com.github.nicholasren.moco.dsl.SMoco._
+import com.github.nicholasren.moco.dsl.Conversions._
 
 class RequestMatcherTest extends FunSpec with BeforeAndAfter with RemoteTestHelper {
 

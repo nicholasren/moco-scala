@@ -3,10 +3,12 @@ package com.github.nicholasren.moco.dsl
 import com.github.dreamhead.moco.resource.Resource
 import com.github.dreamhead.moco.{ResponseHandler, RequestMatcher, Moco}
 import com.github.dreamhead.moco.handler.{SequenceContentHandler, AndResponseHandler}
-import com.github.nicholasren.moco.wrapper.{Rule, PartialRule, ExtractorMatcher}
+import com.github.nicholasren.moco.wrapper.{SMocoConfig, Rule, PartialRule, ExtractorMatcher}
 import scala.collection.JavaConversions._
 import com.github.dreamhead.moco.internal.{MocoHttpServer, ActualHttpServer}
 import com.github.dreamhead.moco.extractor.{ContentRequestExtractor, UriRequestExtractor}
+import com.google.common.collect.ImmutableList
+import Conversions._
 
 object SMoco {
 
@@ -42,10 +44,11 @@ object SMoco {
   def status(code: Int): ResponseHandler = Moco.status(code)
 
   def seq(resources: Resource*): ResponseHandler = {
-    val handlers = resources.map {
-      resource => Moco.`with`(resource)
-    }
-    new SequenceContentHandler(handlers.toArray)
+    val handlers = ImmutableList.
+      builder[ResponseHandler].
+      addAll(resources.map (toHandler)).
+      build
+    new SequenceContentHandler(handlers)
   }
 
   def headers(headers: (String, String)*): ResponseHandler = {
@@ -66,7 +69,7 @@ object SMoco {
 }
 
 
-class SMoco(port: Int) {
+class SMoco(port: Int = 8080) {
 
 
   var rules: List[Rule] = List[Rule]()
@@ -83,22 +86,24 @@ class SMoco(port: Int) {
 
   def when(matcher: RequestMatcher): PartialRule = new PartialRule(matcher, this)
 
+  def config(configFun: => SMocoConfig) {
 
-  private
-
-  def startServer = {
-    val theServer = new MocoHttpServer(replay)
-    theServer.start
-    theServer
-  }
-
-  def replay = {
-    val server = com.github.dreamhead.moco.Moco.httpserver(port).asInstanceOf[ActualHttpServer]
-    rules.foreach { rule: Rule => server.request(rule.matcher).response(rule.handler) }
-    server
   }
 
   def record(rule: Rule) = {
     this.rules = rule :: this.rules
   }
+
+  private def startServer = {
+    val theServer = new MocoHttpServer(replay)
+    theServer.start
+    theServer
+  }
+
+  private def replay = {
+    val server = com.github.dreamhead.moco.Moco.httpserver(port).asInstanceOf[ActualHttpServer]
+    rules.foreach { rule: Rule => server.request(rule.matcher).response(rule.handler) }
+    server
+  }
+
 }
