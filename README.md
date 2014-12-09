@@ -2,13 +2,14 @@ moco-scala
 ==========
 
 This is a scala wrapper for [moco](https://github.com/dreamhead/moco).
+The purpose of this project is to leverage scala's elegant syntax to provide beautiful DSL for using moco in scala testing.
 
 
 ### How to use
 
 __Add dependency:__
 ```sbt
-libraryDependencies += "com.github.nicholasren" % "moco-scala_2.10" % "0.2"
+libraryDependencies += "com.github.nicholasren" %% "moco-scala" % "0.2.2"
 ```
 __Try latest version:__
 
