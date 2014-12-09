@@ -77,9 +77,9 @@ object SMoco {
 
 class SMoco(port: Int = 8080) {
 
-  var configs: Option[MocoConfig[_]] = None
+  var confs: Seq[MocoConfig[_]] = Seq()
 
-  var rules: List[Rule] = List[Rule]()
+  var rules: List[Rule] = List()
 
   def running(testFun: => Unit) = {
 
@@ -93,8 +93,8 @@ class SMoco(port: Int = 8080) {
 
   def when(matcher: RequestMatcher): PartialRule = new PartialRule(matcher, this)
 
-  def config(configFun: => MocoConfig[_]) {
-    this.configs = Some(configFun)
+  def configs(configsFun: => CompositeMocoConfig) {
+    this.confs = configsFun.items
   }
 
   def record(rule: Rule) = {
@@ -108,8 +108,8 @@ class SMoco(port: Int = 8080) {
   }
 
   private def replay = {
-   val server = configs match {
-      case Some(conf: MocoConfig[_]) => com.github.dreamhead.moco.Moco.httpserver(port, conf).asInstanceOf[ActualHttpServer]
+   val server = confs match {
+      case confs: Seq[MocoConfig[_]] => com.github.dreamhead.moco.Moco.httpserver(port, confs: _*).asInstanceOf[ActualHttpServer]
       case _ => com.github.dreamhead.moco.Moco.httpserver(port).asInstanceOf[ActualHttpServer]
     }
 

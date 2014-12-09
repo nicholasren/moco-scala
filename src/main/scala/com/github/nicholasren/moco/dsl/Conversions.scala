@@ -1,7 +1,7 @@
 package com.github.nicholasren.moco.dsl
 
 import com.github.dreamhead.moco.resource.Resource
-import com.github.dreamhead.moco.{ResponseHandler, RequestMatcher, Moco}
+import com.github.dreamhead.moco.{MocoConfig, ResponseHandler, RequestMatcher, Moco}
 import com.github.dreamhead.moco.handler.AndResponseHandler
 import com.github.dreamhead.moco.matcher.AndRequestMatcher
 import scala.collection.JavaConversions._
@@ -13,6 +13,8 @@ object Conversions {
   implicit def toMatcher(resource: Resource): RequestMatcher = Moco.`match`(resource)
 
   implicit def toHandler(resource: Resource): ResponseHandler = Moco.`with`(resource)
+
+  implicit def toCompositeMocoConfig(config: MocoConfig[_]) = new CompositeMocoConfig(Seq(config))
 
   implicit class RichResource(target: Resource) {
     def and(handler: ResponseHandler): ResponseHandler = new AndResponseHandler(Seq[ResponseHandler](handler, target))
@@ -29,4 +31,10 @@ object Conversions {
   implicit class RichResponseHandler(target: ResponseHandler) {
     def and(handler: ResponseHandler): ResponseHandler = new AndResponseHandler(Seq(handler, target))
   }
+
+  implicit class RichMocoConfig(target: MocoConfig[_]) {
+    def and(config: MocoConfig[_]): CompositeMocoConfig = new CompositeMocoConfig(Seq(config, target))
+  }
+
+  case class CompositeMocoConfig(items: Seq[MocoConfig[_]])
 }

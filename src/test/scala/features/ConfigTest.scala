@@ -22,7 +22,7 @@ with RemoteTestHelper {
 
       Given("The server was configured with file root")
       val theServer = server(port)
-      theServer config {
+      theServer configs {
         fileRoot("src/test/resources")
       }
 
@@ -47,7 +47,7 @@ with RemoteTestHelper {
 
       Given("The server was configured with context")
       val theServer = server(port)
-      theServer config {
+      theServer configs {
         context("/hello")
       }
 
