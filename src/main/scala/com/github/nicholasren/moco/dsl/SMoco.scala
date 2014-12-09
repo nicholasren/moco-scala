@@ -11,6 +11,8 @@ import com.google.common.collect.ImmutableList
 import Conversions._
 
 object SMoco {
+  //configs
+  def fileRoot(path: String) = new SMocoConfig("fileRoot", path)
 
   //server
   def server(port: Int): SMoco = new SMoco(port)
@@ -71,6 +73,7 @@ object SMoco {
 
 class SMoco(port: Int = 8080) {
 
+  var configs: Option[SMocoConfig] = None
 
   var rules: List[Rule] = List[Rule]()
 
@@ -87,8 +90,10 @@ class SMoco(port: Int = 8080) {
   def when(matcher: RequestMatcher): PartialRule = new PartialRule(matcher, this)
 
   def config(configFun: => SMocoConfig) {
-
+    this.configs = Some(configFun)
   }
+
+  def config: SMocoConfig = configs.get
 
   def record(rule: Rule) = {
     this.rules = rule :: this.rules
@@ -101,7 +106,11 @@ class SMoco(port: Int = 8080) {
   }
 
   private def replay = {
-    val server = com.github.dreamhead.moco.Moco.httpserver(port).asInstanceOf[ActualHttpServer]
+   val server = configs match {
+      case Some(conf: SMocoConfig) => com.github.dreamhead.moco.Moco.httpserver(port, conf.origin).asInstanceOf[ActualHttpServer]
+      case None => com.github.dreamhead.moco.Moco.httpserver(port).asInstanceOf[ActualHttpServer]
+    }
+
     rules.foreach { rule: Rule => server.request(rule.matcher).response(rule.handler) }
     server
   }

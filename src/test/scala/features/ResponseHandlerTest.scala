@@ -1,4 +1,4 @@
-package com.github.nicholasren.moco.features
+package features
 
 import org.scalatest.{FunSpec, BeforeAndAfter}
 
