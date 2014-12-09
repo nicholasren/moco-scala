@@ -1,25 +1,21 @@
 package com.github.nicholasren.moco.dsl
 
-import org.scalatest.FlatSpec
-import com.github.nicholasren.moco.wrapper.SMocoConfig
+import org.scalatest._
+import Matchers._
 import org.scalatest.mock.MockitoSugar
+import com.github.dreamhead.moco.config.{MocoContextConfig, MocoFileRootConfig}
 
 class SMocoTest extends FlatSpec with MockitoSugar {
 
-  "a configured SMoco" should "memorize these configs" in {
-    val smoco = new SMoco()
+  "a file root config api" should "generate a file root config" in {
+    val config = SMoco.fileRoot("root")
 
-    val configs = mock[SMocoConfig]
-
-    smoco.config(configs)
-
-    assert(smoco.config === configs)
+    config shouldBe a [MocoFileRootConfig]
   }
 
-  "a file root config api" should "generate a file root config" in {
-    val path = "root"
-    val config = SMoco.fileRoot(path)
+  "a context config api" should "generate a context config" in {
+    val config = SMoco.context("hello")
 
-    assert(config.value === path)
+    config shouldBe a [MocoContextConfig]
   }
 }

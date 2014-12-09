@@ -18,7 +18,7 @@ with RemoteTestHelper {
 
   feature("config file root") {
 
-    scenario("serving file under configured root") {
+    scenario("serving file under configured file root") {
 
       Given("The server was configured with file root")
       val theServer = server(port)
@@ -37,6 +37,30 @@ with RemoteTestHelper {
       Then("The response file should be served under configured file root")
       theServer running {
         assert(get(remoteUrl("/")) === "bar")
+      }
+    }
+  }
+
+  feature("config context") {
+
+    scenario("serving requests under configured context") {
+
+      Given("The server was configured with context")
+      val theServer = server(port)
+      theServer config {
+        context("/hello")
+      }
+
+      When("The server serving requests")
+      theServer when {
+        method("get")
+      } then {
+        text("world")
+      }
+
+      Then("The response should be served under configured context")
+      theServer running {
+        assert(get(remoteUrl("/hello")) === "world")
       }
     }
   }

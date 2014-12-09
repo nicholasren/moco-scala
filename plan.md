@@ -44,7 +44,7 @@ running {
 
 ======HERE========
 ### support config
-    - config file root
+    - config file root DONE
     - config context
 
 ### separating unit tests and functional tests

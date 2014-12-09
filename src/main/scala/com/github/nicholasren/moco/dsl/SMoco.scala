@@ -1,18 +1,22 @@
 package com.github.nicholasren.moco.dsl
 
 import com.github.dreamhead.moco.resource.Resource
-import com.github.dreamhead.moco.{ResponseHandler, RequestMatcher, Moco}
+import com.github.dreamhead.moco.{MocoConfig, ResponseHandler, RequestMatcher, Moco}
 import com.github.dreamhead.moco.handler.{SequenceContentHandler, AndResponseHandler}
-import com.github.nicholasren.moco.wrapper.{SMocoConfig, Rule, PartialRule, ExtractorMatcher}
+import com.github.nicholasren.moco.wrapper.{Rule, PartialRule, ExtractorMatcher}
 import scala.collection.JavaConversions._
 import com.github.dreamhead.moco.internal.{MocoHttpServer, ActualHttpServer}
 import com.github.dreamhead.moco.extractor.{ContentRequestExtractor, UriRequestExtractor}
 import com.google.common.collect.ImmutableList
 import Conversions._
+import com.github.dreamhead.moco.config.{MocoContextConfig, MocoFileRootConfig}
 
 object SMoco {
+
   //configs
-  def fileRoot(path: String) = new SMocoConfig("fileRoot", path)
+  def fileRoot(path: String): MocoConfig[_] = new MocoFileRootConfig(path)
+
+  def context(context: String): MocoConfig[_] = new MocoContextConfig(context)
 
   //server
   def server(port: Int): SMoco = new SMoco(port)
@@ -73,7 +77,7 @@ object SMoco {
 
 class SMoco(port: Int = 8080) {
 
-  var configs: Option[SMocoConfig] = None
+  var configs: Option[MocoConfig[_]] = None
 
   var rules: List[Rule] = List[Rule]()
 
@@ -89,11 +93,9 @@ class SMoco(port: Int = 8080) {
 
   def when(matcher: RequestMatcher): PartialRule = new PartialRule(matcher, this)
 
-  def config(configFun: => SMocoConfig) {
+  def config(configFun: => MocoConfig[_]) {
     this.configs = Some(configFun)
   }
-
-  def config: SMocoConfig = configs.get
 
   def record(rule: Rule) = {
     this.rules = rule :: this.rules
@@ -107,8 +109,8 @@ class SMoco(port: Int = 8080) {
 
   private def replay = {
    val server = configs match {
-      case Some(conf: SMocoConfig) => com.github.dreamhead.moco.Moco.httpserver(port, conf.origin).asInstanceOf[ActualHttpServer]
-      case None => com.github.dreamhead.moco.Moco.httpserver(port).asInstanceOf[ActualHttpServer]
+      case Some(conf: MocoConfig[_]) => com.github.dreamhead.moco.Moco.httpserver(port, conf).asInstanceOf[ActualHttpServer]
+      case _ => com.github.dreamhead.moco.Moco.httpserver(port).asInstanceOf[ActualHttpServer]
     }
 
     rules.foreach { rule: Rule => server.request(rule.matcher).response(rule.handler) }
