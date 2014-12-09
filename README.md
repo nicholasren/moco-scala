@@ -4,6 +4,7 @@ moco-scala
 This is a scala wrapper for [moco](https://github.com/dreamhead/moco).
 The purpose of this project is to leverage scala's elegant syntax to provide beautiful DSL for using moco in scala testing.
 
+[![Build Status](https://travis-ci.org/nicholasren/moco-scala.svg?branch=master)](https://travis-ci.org/nicholasren/moco-scala)
 
 ### How to use
 
