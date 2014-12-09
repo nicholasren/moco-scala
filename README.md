@@ -42,6 +42,28 @@ theServer running  {
     assert(getForStatus(remoteUrl("/hello")) === 200)
 }
 ```
+#### Confg server
+Current moco support two global configurations: [file root](https://github.com/dreamhead/moco/blob/master/moco-doc/global-settings.md#file-root) and [context](https://github.com/dreamhead/moco/blob/master/moco-doc/global-settings.md#context).
+
+How to config them in moco-scala, here are the examples:
+
+```scala
+theServer configs {
+  fileRoot("src/test/resources")
+}
+```
+
+```scala
+theServer configs {
+  context("/hello")
+}
+```
+to config both of them at once:
+```scala
+theServer configs {
+  context("/hello") and fileRoot("src/test/resources")
+}
+```
 
 
 ### Concept:
@@ -99,7 +121,8 @@ when {
   text("post")
 }
 ```
-for more usage, please refer to [tests](https://github.com/nicholasren/moco-scala/blob/master/src/test/scala/com/github/nicholasren/moco/dsl/SMocoTest.scala) or refer to [moco's api doc](https://github.com/dreamhead/moco/blob/master/moco-doc/apis.md).
+
+for more usage, please refer to [functional tests](https://github.com/nicholasren/moco-scala/tree/master/src/test/scala/features)
 
 ### Contribution:
 This project is still in process, any question and suggestion are more than welcomed.
