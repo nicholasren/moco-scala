@@ -16,6 +16,10 @@ object Conversions {
 
   implicit def toCompositeMocoConfig(config: MocoConfig[_]) = new CompositeMocoConfig(Seq(config))
 
+  case class CompositeMocoConfig(items: Seq[MocoConfig[_]]) {
+    def and(config: MocoConfig[_]): CompositeMocoConfig = new CompositeMocoConfig(config +: items )
+  }
+
   implicit class RichResource(target: Resource) {
     def and(handler: ResponseHandler): ResponseHandler = new AndResponseHandler(Seq[ResponseHandler](handler, target))
 
@@ -31,10 +35,4 @@ object Conversions {
   implicit class RichResponseHandler(target: ResponseHandler) {
     def and(handler: ResponseHandler): ResponseHandler = new AndResponseHandler(Seq(handler, target))
   }
-
-  implicit class RichMocoConfig(target: MocoConfig[_]) {
-    def and(config: MocoConfig[_]): CompositeMocoConfig = new CompositeMocoConfig(Seq(config, target))
-  }
-
-  case class CompositeMocoConfig(items: Seq[MocoConfig[_]])
 }
