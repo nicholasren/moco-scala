@@ -1,47 +1,45 @@
-### target
+#### tasks:
 
-###record
+##### Matchers:
+- form matcher DONE
 
-##### one request
-```
-theServer when {
-    method "get"
-      uri "/user"
-  } then {
-    "user detail"
-  }
-```
+- xml content matcher
+- xml file
+- xpath matcher
 
-##### multiple requests
+- json content matcher
+- json file matcher
+- jsonpath matcher
 
-```
-theServer when {
-    method "get"
-      uri "/user"
-  } then {
-    "user detail"
-  } when {
-      method "post"
-    }
-  then {
-    "body"
-  }
-```
+- operators:
+    - matches DONE
+    - startWith
+    - endWith
+    - contain
+    - exist
 
 
-### use in test
+###### Response:
+- proxy
+    - failover
+    - playback
+    - from(xx).to(yy)
+- redirect
+- attachment
+- latency
+- mount
+  - include
+  - exclude
+- events
+  - complete
+  - asynchronous
+- verify
 
-```
-running {
-  //interact with server and expect result
-}
-```
-
-======HERE========
-### support config
-    - config file root DONE
-    - config context DONE
-
-### separating unit tests and functional tests DONE
-
-### support cookie
+- template(experimental-feature)
+  - version
+  - method
+  - content
+  - query
+  - form
+  - cookie
+  - custom variable
