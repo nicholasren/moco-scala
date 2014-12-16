@@ -52,7 +52,7 @@ object SMoco {
   def seq(resources: Resource*): ResponseHandler = {
     val handlers = ImmutableList.
       builder[ResponseHandler].
-      addAll(resources.map (toHandler)).
+      addAll(resources.map(toHandler)).
       build
     new SequenceContentHandler(handlers)
   }
@@ -93,6 +93,11 @@ class SMoco(port: Int = 8080) {
 
   def when(matcher: RequestMatcher): PartialRule = new PartialRule(matcher, this)
 
+  def default(handler: ResponseHandler): SMoco = {
+    this.rules = Rule.default(handler) :: this.rules
+    this
+  }
+
   def configs(configsFun: => CompositeMocoConfig) {
     this.confs = configsFun.items
   }
@@ -108,12 +113,18 @@ class SMoco(port: Int = 8080) {
   }
 
   private def replay = {
-   val server = confs match {
+    val server = confs match {
       case confs: Seq[MocoConfig[_]] => com.github.dreamhead.moco.Moco.httpserver(port, confs: _*).asInstanceOf[ActualHttpServer]
       case _ => com.github.dreamhead.moco.Moco.httpserver(port).asInstanceOf[ActualHttpServer]
     }
 
-    rules.foreach { rule: Rule => server.request(rule.matcher).response(rule.handler) }
+    rules.foreach {
+      rule: Rule =>
+        rule.matcher match {
+          case Some(matcher) => server.request(matcher).response(rule.handler)
+          case None => server.response(rule.handler)
+        }
+    }
     server
   }
 

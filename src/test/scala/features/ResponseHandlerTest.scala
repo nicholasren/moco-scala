@@ -20,6 +20,18 @@ class ResponseHandlerTest extends FunSpec with BeforeAndAfter with RemoteTestHel
     theServer = server(port)
   }
 
+  describe("default") {
+    it("send default response") {
+      theServer default {
+        text("default")
+      }
+
+      theServer running {
+        assert(get(root) === "default")
+      }
+    }
+  }
+
   describe("responses") {
     it("send text") {
       theServer when {
