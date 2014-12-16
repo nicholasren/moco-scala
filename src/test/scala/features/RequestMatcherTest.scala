@@ -126,6 +126,21 @@ class RequestMatcherTest extends FunSpec with BeforeAndAfter with RemoteTestHelp
       }
     }
 
+    it("match by cookie") {
+      theServer default {
+        cookies("foo" -> "bar") and status(302)
+      } when {
+        cookie("foo") === "bar"
+      } then {
+        status(200)
+      }
+
+      theServer running {
+        assert(getForStatus(root) === 302)
+        assert(getForStatus(root) === 200)
+      }
+    }
+
     it("can define multi matchers") {
       theServer when {
         method("get")
