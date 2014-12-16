@@ -21,9 +21,9 @@
 
 ###### Response:
 - proxy
-    - failover
-    - playback
-    - from(xx).to(yy)
+    - failover DONE
+    - playback DONE
+    - from(xx).to(yy) DONE
 - redirect
 - attachment
 - latency

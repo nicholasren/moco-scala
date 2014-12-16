@@ -10,10 +10,10 @@ import com.github.dreamhead.moco.extractor.{FormRequestExtractor, ContentRequest
 import com.google.common.collect.ImmutableList
 import Conversions._
 import com.github.dreamhead.moco.config.{MocoContextConfig, MocoFileRootConfig}
+import com.github.dreamhead.moco.handler.proxy.ProxyConfig
+import com.github.dreamhead.moco.handler.failover.Failover
 
 object SMoco {
-
-
 
   //configs
   def fileRoot(path: String): MocoConfig[_] = new MocoFileRootConfig(path)
@@ -59,6 +59,17 @@ object SMoco {
 
   //handlers
   def status(code: Int): ResponseHandler = Moco.status(code)
+
+  //proxy
+  def proxy(url: String)(implicit failover : Failover) = Moco.proxy(url, failover)
+
+  def proxy(config: => ProxyConfig) = Moco.proxy(config)
+
+  def failover(filename: String): Failover = Moco.failover(filename)
+
+  def playback(filename: String): Failover = Moco.playback(filename)
+
+  def from(localBase: String) = Moco.from(localBase)
 
   def seq(resources: Resource*): ResponseHandler = {
     val handlers = ImmutableList.

@@ -5,6 +5,7 @@ import com.github.dreamhead.moco.{MocoConfig, ResponseHandler, RequestMatcher, M
 import com.github.dreamhead.moco.handler.AndResponseHandler
 import com.github.dreamhead.moco.matcher.AndRequestMatcher
 import scala.collection.JavaConversions._
+import com.github.dreamhead.moco.handler.failover.Failover
 
 object Conversions {
   //implicit
@@ -15,6 +16,8 @@ object Conversions {
   implicit def toHandler(resource: Resource): ResponseHandler = Moco.`with`(resource)
 
   implicit def toCompositeMocoConfig(config: MocoConfig[_]) = new CompositeMocoConfig(Seq(config))
+
+  implicit val failover: Failover = Failover.DEFAULT_FAILOVER
 
   case class CompositeMocoConfig(items: Seq[MocoConfig[_]]) {
     def and(config: MocoConfig[_]): CompositeMocoConfig = new CompositeMocoConfig(config +: items )

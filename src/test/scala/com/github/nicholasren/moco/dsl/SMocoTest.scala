@@ -4,9 +4,9 @@ import org.scalatest._
 import Matchers._
 import org.scalatest.mock.MockitoSugar
 import com.github.dreamhead.moco.config.{MocoContextConfig, MocoFileRootConfig}
-import com.github.dreamhead.moco.{RequestMatcher, MocoConfig}
-import com.github.nicholasren.moco.dsl.Conversions.CompositeMocoConfig
+import com.github.dreamhead.moco.{ResponseHandler, RequestMatcher, MocoConfig}
 import com.github.nicholasren.moco.wrapper.ExtractorMatcher
+import com.github.nicholasren.moco.dsl.Conversions._
 
 class SMocoTest extends FlatSpec with MockitoSugar {
   val server = new SMoco()
@@ -51,6 +51,28 @@ class SMocoTest extends FlatSpec with MockitoSugar {
 
   "a jsonpath matcher" should "be a extractor matcher" in {
     SMoco.jsonPath("$.book[*].price") shouldBe a [ExtractorMatcher]
+  }
+
+  "a proxy" should "be a response handler" in {
+    SMoco.proxy("http://github.com") shouldBe a [ResponseHandler]
+  }
+
+  "a proxy with failover" should "be a response handler" in {
+    SMoco.proxy("http://github.com") {
+      SMoco.failover("failover-filename")
+    } shouldBe a [ResponseHandler]
+  }
+
+  "a proxy with playback" should "be a response handler" in {
+    SMoco.proxy("http://github.com") {
+      SMoco.playback("playback-filename")
+    } shouldBe a [ResponseHandler]
+  }
+
+  "a proxy with from and to" should "be a response handler" in {
+    SMoco.proxy {
+      SMoco.from("local-base") to("remote-base")
+    } shouldBe a [ResponseHandler]
   }
 
 }
