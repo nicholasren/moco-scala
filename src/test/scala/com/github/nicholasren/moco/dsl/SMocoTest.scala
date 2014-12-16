@@ -6,7 +6,6 @@ import org.scalatest.mock.MockitoSugar
 import com.github.dreamhead.moco.config.{MocoContextConfig, MocoFileRootConfig}
 import com.github.dreamhead.moco.{RequestMatcher, MocoConfig}
 import com.github.nicholasren.moco.dsl.Conversions.CompositeMocoConfig
-import com.github.dreamhead.moco.extractor.FormRequestExtractor
 import com.github.nicholasren.moco.wrapper.ExtractorMatcher
 
 class SMocoTest extends FlatSpec with MockitoSugar {

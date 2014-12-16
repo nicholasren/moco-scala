@@ -13,10 +13,10 @@
 
 - operators:
     - matches DONE
-    - startWith
-    - endWith
-    - contain
-    - exist
+    - startWith DONE
+    - endWith DONE
+    - contain DONE
+    - exist DONE
 
 
 ###### Response:
