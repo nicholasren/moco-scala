@@ -4,7 +4,7 @@ import org.scalatest._
 import Matchers._
 import org.scalatest.mock.MockitoSugar
 import com.github.dreamhead.moco.config.{MocoContextConfig, MocoFileRootConfig}
-import com.github.dreamhead.moco.MocoConfig
+import com.github.dreamhead.moco.{RequestMatcher, MocoConfig}
 import com.github.nicholasren.moco.dsl.Conversions.CompositeMocoConfig
 import com.github.dreamhead.moco.extractor.FormRequestExtractor
 import com.github.nicholasren.moco.wrapper.ExtractorMatcher
@@ -34,7 +34,24 @@ class SMocoTest extends FlatSpec with MockitoSugar {
     config shouldBe a [MocoContextConfig]
   }
 
-  "a form matcher" should "capture matcher" in {
+  "a form matcher" should "be a extractor matcher" in {
     SMoco.form("name") shouldBe a [ExtractorMatcher]
   }
+
+  "a xml matcher" should "be a request matcher" in {
+    SMoco.xml(SMoco.file("filename")) shouldBe a [RequestMatcher]
+  }
+
+  "a xpath matcher" should "be a extractor matcher" in {
+    SMoco.xpath("/request/parameters/id/text()") shouldBe a [ExtractorMatcher]
+  }
+
+  "a json matcher" should "be a request matcher" in {
+    SMoco.json(SMoco.file("filename")) shouldBe a [RequestMatcher]
+  }
+
+  "a jsonpath matcher" should "be a extractor matcher" in {
+    SMoco.jsonPath("$.book[*].price") shouldBe a [ExtractorMatcher]
+  }
+
 }

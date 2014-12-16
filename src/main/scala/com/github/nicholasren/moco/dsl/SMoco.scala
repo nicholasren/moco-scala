@@ -13,6 +13,8 @@ import com.github.dreamhead.moco.config.{MocoContextConfig, MocoFileRootConfig}
 
 object SMoco {
 
+
+
   //configs
   def fileRoot(path: String): MocoConfig[_] = new MocoFileRootConfig(path)
 
@@ -47,6 +49,13 @@ object SMoco {
 
   def form(key: String): ExtractorMatcher = new ExtractorMatcher(Moco.form(key))
 
+  def xpath(path: String): ExtractorMatcher = new ExtractorMatcher(Moco.xpath(path))
+
+  def jsonPath(path: String): ExtractorMatcher = new ExtractorMatcher(Moco.jsonPath(path))
+
+  //request matcher
+  def xml(content: Resource): RequestMatcher = Moco.xml(content)
+  def json(content: Resource): RequestMatcher = Moco.json(content)
 
   //handlers
   def status(code: Int): ResponseHandler = Moco.status(code)

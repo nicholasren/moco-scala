@@ -3,13 +3,13 @@
 ##### Matchers:
 - form matcher DONE
 
-- xml content matcher
-- xml file
-- xpath matcher
+- xml content matcher DONE
+- xml file DONE
+- xpath matcher DONE
 
-- json content matcher
-- json file matcher
-- jsonpath matcher
+- json content matcher DONE
+- json file matcher    DONE
+- jsonpath matcher     DONE
 
 - operators:
     - matches DONE
