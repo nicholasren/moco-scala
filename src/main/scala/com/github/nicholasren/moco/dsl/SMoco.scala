@@ -6,7 +6,7 @@ import com.github.dreamhead.moco.handler.{SequenceContentHandler, AndResponseHan
 import com.github.nicholasren.moco.wrapper.{Rule, PartialRule, ExtractorMatcher}
 import scala.collection.JavaConversions._
 import com.github.dreamhead.moco.internal.{MocoHttpServer, ActualHttpServer}
-import com.github.dreamhead.moco.extractor.{ContentRequestExtractor, UriRequestExtractor}
+import com.github.dreamhead.moco.extractor.{FormRequestExtractor, ContentRequestExtractor, UriRequestExtractor}
 import com.google.common.collect.ImmutableList
 import Conversions._
 import com.github.dreamhead.moco.config.{MocoContextConfig, MocoFileRootConfig}
@@ -44,6 +44,8 @@ object SMoco {
   def uri: ExtractorMatcher = new ExtractorMatcher(new UriRequestExtractor)
 
   def text: ExtractorMatcher = new ExtractorMatcher(new ContentRequestExtractor)
+
+  def form(key: String): ExtractorMatcher = new ExtractorMatcher(Moco.form(key))
 
 
   //handlers
