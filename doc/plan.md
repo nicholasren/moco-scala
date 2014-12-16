@@ -28,11 +28,6 @@ theServer when {
   }
 ```
 
-1. start with `com.github.dreamhead.moco.parser.model.SessionSetting`, create a json runner/related runner
-2. run it
-3.
-
-
 
 ### use in test
 
@@ -47,4 +42,6 @@ running {
     - config file root DONE
     - config context DONE
 
-### separating unit tests and functional tests
+### separating unit tests and functional tests DONE
+
+### support cookie
