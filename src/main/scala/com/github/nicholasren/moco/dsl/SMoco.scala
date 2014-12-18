@@ -1,7 +1,7 @@
 package com.github.nicholasren.moco.dsl
 
-import com.github.dreamhead.moco.resource.Resource
-import com.github.dreamhead.moco.{MocoConfig, ResponseHandler, RequestMatcher, Moco}
+import com.github.dreamhead.moco.resource.{ContentResource, Resource}
+import com.github.dreamhead.moco._
 import com.github.dreamhead.moco.handler.{SequenceContentHandler, AndResponseHandler}
 import com.github.nicholasren.moco.wrapper.{Rule, PartialRule, ExtractorMatcher}
 import scala.collection.JavaConversions._
@@ -16,20 +16,23 @@ import io.netty.handler.codec.http.HttpResponseStatus
 import com.google.common.net.HttpHeaders
 import scala.concurrent.duration.Duration
 import com.github.dreamhead.moco.procedure.LatencyProcedure
+import scala.Some
+import com.github.nicholasren.moco.dsl.Conversions.CompositeMocoConfig
+import com.github.nicholasren.moco.wrapper.ExtractorMatcher
 
 object SMoco {
 
-
-
-  //configs
+  //configs - start
   def fileRoot(path: String): MocoConfig[_] = new MocoFileRootConfig(path)
 
   def context(context: String): MocoConfig[_] = new MocoContextConfig(context)
+  //configs - end
 
   //server
   def server(port: Int): SMoco = new SMoco(port)
 
   //resources - start
+
   def uri(value: String): Resource = Moco.uri(value)
 
   def method(value: String): Resource = Moco.method(value)
@@ -41,9 +44,11 @@ object SMoco {
   def file(filename: String): Resource = Moco.file(filename)
 
   def version(value: String): Resource = Moco.version(value)
+
   //resources - end
 
-  //extractor matcher start
+  //extractor matcher - start
+
   def header(name: String): ExtractorMatcher = new ExtractorMatcher(Moco.header(name))
 
   def query(name: String): ExtractorMatcher = new ExtractorMatcher(Moco.query(name))
@@ -59,16 +64,18 @@ object SMoco {
   def xpath(path: String): ExtractorMatcher = new ExtractorMatcher(Moco.xpath(path))
 
   def jsonPath(path: String): ExtractorMatcher = new ExtractorMatcher(Moco.jsonPath(path))
-  //extractor matcher end
 
-  //request matcher start
+  //extractor matcher - end
+
+  //request matcher - start
   def xml(content: Resource): RequestMatcher = Moco.xml(content)
 
   def json(content: Resource): RequestMatcher = Moco.json(content)
-  //request matcher end
+  //request matcher - end
 
-  // procedure
+  // procedure - start
   def latency(duration: Duration): LatencyProcedure = Moco.latency(duration.toMillis)
+  // procedure - end
 
   //response handlers - start
   def status(code: Int): ResponseHandler = Moco.status(code)
@@ -114,10 +121,25 @@ object SMoco {
   def from(localBase: String) = Moco.from(localBase)
   //proxy - end
 
+  //trigger - start
+  def complete(action: MocoEventAction): MocoEventTrigger = Moco.complete(action)
+  //trigger - end
+
+  //event action - start
+  def async(action: MocoEventAction): MocoEventAction = Moco.async(action)
+
+  def async(action: MocoEventAction, duration: Duration): MocoEventAction = Moco.async(action, latency(duration))
+
+  def get(url: String) = Moco.get(url)
+
+  def post(url: String, content: ContentResource) = Moco.post(url, content)
+  //event action - end
 }
 
 
 class SMoco(port: Int = 8080) {
+
+  var triggers: List[MocoEventTrigger] = List()
 
   var confs: Seq[MocoConfig[_]] = Seq()
 
@@ -144,6 +166,10 @@ class SMoco(port: Int = 8080) {
     this.confs = configsFun.items
   }
 
+  def on(trigger: MocoEventTrigger) {
+    this.triggers = trigger :: this.triggers
+  }
+
   def record(rule: Rule) = {
     this.rules = rule :: this.rules
   }
@@ -167,6 +193,9 @@ class SMoco(port: Int = 8080) {
           case None => server.response(rule.handler)
         }
     }
+
+    triggers.foreach(server.on(_))
+
     server
   }
 

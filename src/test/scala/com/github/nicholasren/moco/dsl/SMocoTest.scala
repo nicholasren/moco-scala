@@ -4,9 +4,14 @@ import org.scalatest._
 import Matchers._
 import org.scalatest.mock.MockitoSugar
 import com.github.dreamhead.moco.config.{MocoContextConfig, MocoFileRootConfig}
-import com.github.dreamhead.moco.{ResponseHandler, RequestMatcher, MocoConfig}
+import com.github.dreamhead.moco._
 import com.github.nicholasren.moco.wrapper.ExtractorMatcher
 import com.github.nicholasren.moco.dsl.Conversions._
+import com.github.nicholasren.moco.dsl.Conversions.CompositeMocoConfig
+import com.github.nicholasren.moco.wrapper.ExtractorMatcher
+import com.github.dreamhead.moco.action.MocoAsyncAction
+import scala.concurrent.duration.{FiniteDuration, Duration}
+import java.util.concurrent.TimeUnit
 
 class SMocoTest extends FlatSpec with MockitoSugar {
   val server = new SMoco()
@@ -20,6 +25,14 @@ class SMocoTest extends FlatSpec with MockitoSugar {
 
      server.confs should equal (Seq(conf1, conf2))
   }
+
+  "a event handler" should "record event triggers" in {
+    val trigger = mock[MocoEventTrigger]
+    server.on(trigger)
+
+    server.triggers should contain(trigger)
+  }
+
 
   "a file root config api" should "generate a file root config" in {
     val config = SMoco.fileRoot("root")
@@ -78,5 +91,29 @@ class SMocoTest extends FlatSpec with MockitoSugar {
   "a attachment" should "be a response handler" in {
     SMoco.attachment("attachment-file-name", SMoco.file("filename")) shouldBe a [ResponseHandler]
   }
+
+  "a complete trigger" should "be moco event trigger" in {
+    val action = mock[MocoEventAction]
+    SMoco.complete(action) shouldBe a [MocoEventTrigger]
+  }
+
+  "a async action" should "be a moco event action" in {
+    val action = mock[MocoEventAction]
+    SMoco.async(action) shouldBe a [MocoEventAction]
+  }
+
+  "a async action" should "be a moco async event action" in {
+    val action = mock[MocoEventAction]
+    SMoco.async(action) shouldBe a [MocoAsyncAction]
+  }
+
+  "a async action with latency" should "be a moco async event action" in {
+    val action = mock[MocoEventAction]
+    val duration: FiniteDuration = Duration(2, TimeUnit.SECONDS)
+
+    SMoco.async(action, duration) shouldBe a [MocoAsyncAction]
+
+  }
+
 
 }

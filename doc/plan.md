@@ -26,14 +26,20 @@
     - from(xx).to(yy) DONE
 - redirectTo DONE
 - attachment DONE
-- latency
+- latency DONE
+
+
+- events
+  - complete DONE
+    - get    DONE
+    - post   DONE
+  - asynchronous DONE
+
+- verify
+
 - mount
   - include
   - exclude
-- events
-  - complete
-  - asynchronous
-- verify
 
 - template(experimental-feature)
   - version
