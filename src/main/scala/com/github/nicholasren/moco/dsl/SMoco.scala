@@ -12,8 +12,14 @@ import Conversions._
 import com.github.dreamhead.moco.config.{MocoContextConfig, MocoFileRootConfig}
 import com.github.dreamhead.moco.handler.proxy.ProxyConfig
 import com.github.dreamhead.moco.handler.failover.Failover
+import io.netty.handler.codec.http.HttpResponseStatus
+import com.google.common.net.HttpHeaders
+import scala.concurrent.duration.Duration
+import com.github.dreamhead.moco.procedure.LatencyProcedure
 
 object SMoco {
+
+
 
   //configs
   def fileRoot(path: String): MocoConfig[_] = new MocoFileRootConfig(path)
@@ -23,7 +29,7 @@ object SMoco {
   //server
   def server(port: Int): SMoco = new SMoco(port)
 
-  //resources
+  //resources - start
   def uri(value: String): Resource = Moco.uri(value)
 
   def method(value: String): Resource = Moco.method(value)
@@ -35,8 +41,9 @@ object SMoco {
   def file(filename: String): Resource = Moco.file(filename)
 
   def version(value: String): Resource = Moco.version(value)
+  //resources - end
 
-  //extractor matcher
+  //extractor matcher start
   def header(name: String): ExtractorMatcher = new ExtractorMatcher(Moco.header(name))
 
   def query(name: String): ExtractorMatcher = new ExtractorMatcher(Moco.query(name))
@@ -52,24 +59,23 @@ object SMoco {
   def xpath(path: String): ExtractorMatcher = new ExtractorMatcher(Moco.xpath(path))
 
   def jsonPath(path: String): ExtractorMatcher = new ExtractorMatcher(Moco.jsonPath(path))
+  //extractor matcher end
 
-  //request matcher
+  //request matcher start
   def xml(content: Resource): RequestMatcher = Moco.xml(content)
-  def json(content: Resource): RequestMatcher = Moco.json(content)
 
-  //handlers
+  def json(content: Resource): RequestMatcher = Moco.json(content)
+  //request matcher end
+
+  // procedure
+  def latency(duration: Duration): LatencyProcedure = Moco.latency(duration.toMillis)
+
+  //response handlers - start
   def status(code: Int): ResponseHandler = Moco.status(code)
 
-  //proxy
-  def proxy(url: String)(implicit failover : Failover) = Moco.proxy(url, failover)
+  def attachment(filename: String, resource: Resource) = Moco.attachment(filename, resource)
 
-  def proxy(config: => ProxyConfig) = Moco.proxy(config)
-
-  def failover(filename: String): Failover = Moco.failover(filename)
-
-  def playback(filename: String): Failover = Moco.playback(filename)
-
-  def from(localBase: String) = Moco.from(localBase)
+  def redirectTo(uri: String): ResponseHandler = status(HttpResponseStatus.FOUND.code()) and headers(HttpHeaders.LOCATION -> uri)
 
   def seq(resources: Resource*): ResponseHandler = {
     val handlers = ImmutableList.
@@ -94,6 +100,20 @@ object SMoco {
     }
     new AndResponseHandler(handlers)
   }
+  //response handlers - end
+
+  //proxy - start
+  def proxy(url: String)(implicit failover : Failover) = Moco.proxy(url, failover)
+
+  def proxy(config: => ProxyConfig) = Moco.proxy(config)
+
+  def failover(filename: String): Failover = Moco.failover(filename)
+
+  def playback(filename: String): Failover = Moco.playback(filename)
+
+  def from(localBase: String) = Moco.from(localBase)
+  //proxy - end
+
 }
 
 

@@ -1,7 +1,7 @@
 package com.github.nicholasren.moco.dsl
 
 import org.scalatest.FlatSpec
-import com.github.dreamhead.moco.MocoConfig
+import com.github.dreamhead.moco.{MocoProcedure, ResponseHandler, MocoConfig}
 import org.scalatest.Matchers._
 import org.scalatest.mock.MockitoSugar
 import Conversions._
@@ -20,5 +20,11 @@ class ConversionsTest extends FlatSpec with MockitoSugar {
   "a moco config" should "convert to a composite config" in {
     val configs: CompositeMocoConfig = mock[MocoConfig[_]]
     configs shouldBe a [CompositeMocoConfig]
+  }
+
+  "a procedure" should "convert to a response handler" in {
+    val procedure: ResponseHandler = mock[MocoProcedure]
+    procedure shouldBe a [ResponseHandler]
+
   }
 }

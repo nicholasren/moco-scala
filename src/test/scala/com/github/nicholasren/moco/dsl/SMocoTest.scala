@@ -75,4 +75,8 @@ class SMocoTest extends FlatSpec with MockitoSugar {
     } shouldBe a [ResponseHandler]
   }
 
+  "a attachment" should "be a response handler" in {
+    SMoco.attachment("attachment-file-name", SMoco.file("filename")) shouldBe a [ResponseHandler]
+  }
+
 }

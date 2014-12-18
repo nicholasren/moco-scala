@@ -24,8 +24,8 @@
     - failover DONE
     - playback DONE
     - from(xx).to(yy) DONE
-- redirect
-- attachment
+- redirectTo DONE
+- attachment DONE
 - latency
 - mount
   - include

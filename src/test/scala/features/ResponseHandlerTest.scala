@@ -9,6 +9,8 @@ import com.github.nicholasren.moco.dsl.SMoco
 import com.github.nicholasren.moco.dsl.SMoco._
 import com.github.nicholasren.moco.dsl.Conversions._
 
+import scala.concurrent.duration.Duration
+import java.util.concurrent.TimeUnit
 
 class ResponseHandlerTest extends FunSpec with BeforeAndAfter with RemoteTestHelper {
 
@@ -29,6 +31,43 @@ class ResponseHandlerTest extends FunSpec with BeforeAndAfter with RemoteTestHel
       theServer running {
         assert(get(root) === "default")
       }
+    }
+  }
+
+  describe("redirect") {
+    it("redirect to expected url") {
+
+      theServer when {
+        uri("/")
+      } then {
+        text("foo")
+      } when {
+        uri("/redirect")
+      } then redirectTo("/")
+
+      theServer running {
+        assert(get(remoteUrl("/redirect")) === "foo")
+      }
+    }
+  }
+
+  describe("latency") {
+
+    it("wait for a while") {
+      val duration = Duration(1, TimeUnit.SECONDS)
+
+      theServer default {
+        latency(duration)
+      }
+
+     theServer running {
+
+       val start = System.currentTimeMillis()
+       getForStatus(root)
+       val stop = System.currentTimeMillis()
+
+       assert((stop - start) >= duration.toMillis)
+     }
     }
   }
 
