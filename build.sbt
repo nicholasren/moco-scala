@@ -4,7 +4,7 @@ sonatypeSettings
 
 name := "moco-scala"
 
-version := "0.2.2"
+version := "0.3"
 
 scalaVersion := "2.11.4"
 

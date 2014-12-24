@@ -10,7 +10,7 @@ The purpose of this project is to leverage scala's elegant syntax to provide bea
 
 __Add dependency:__
 ```sbt
-libraryDependencies += "com.github.nicholasren" %% "moco-scala" % "0.2.2"
+libraryDependencies += "com.github.nicholasren" %% "moco-scala" % "0.3"
 ```
 __Try latest version:__
 
