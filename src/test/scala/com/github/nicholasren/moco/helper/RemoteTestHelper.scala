@@ -2,8 +2,6 @@ package org.github.nicholasren.moco.helper
 
 import org.apache.http.client.fluent.Request
 import scala.Predef.String
-import java.lang.String
-import scala.Predef.String
 import org.apache.http.message.BasicNameValuePair
 import org.apache.http.HttpVersion
 
@@ -17,6 +15,10 @@ trait RemoteTestHelper {
 
   def post(uri: String, content: String): String = {
     postBytes(uri, content.getBytes())
+  }
+
+  def post(uri: String, form: (String, String)) = {
+    Request.Post(uri).bodyForm(new BasicNameValuePair(form._1, form._2)).execute.returnContent.asString
   }
 
   def put(uri: String) = {
@@ -39,8 +41,9 @@ trait RemoteTestHelper {
   def getWithHeaders(headers: (String, String)*) = {
     val get: Request = Request.Get(root)
 
-    headers.foreach { header =>
-      get.addHeader(header._1, header._2)
+    headers.foreach {
+      header =>
+        get.addHeader(header._1, header._2)
     }
 
     get.execute().returnContent().asString
@@ -49,8 +52,9 @@ trait RemoteTestHelper {
   def getForStatusWithHeaders(headers: (String, String)*) = {
     val get: Request = Request.Get(root)
 
-    headers.foreach { header =>
-      get.addHeader(header._1, header._2)
+    headers.foreach {
+      header =>
+        get.addHeader(header._1, header._2)
     }
 
     get.execute.returnResponse.getStatusLine.getStatusCode
@@ -70,5 +74,5 @@ trait RemoteTestHelper {
   def remoteUrl(uri: String) = root + uri
 
   private
-  def get(request: Request): String =  request.execute.returnContent.asString
+  def get(request: Request): String = request.execute.returnContent.asString
 }

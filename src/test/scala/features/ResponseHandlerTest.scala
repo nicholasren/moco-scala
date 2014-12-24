@@ -43,7 +43,9 @@ class ResponseHandlerTest extends FunSpec with BeforeAndAfter with RemoteTestHel
         text("foo")
       } when {
         uri("/redirect")
-      } then redirectTo("/")
+      } then {
+        redirectTo("/")
+      }
 
       theServer running {
         assert(get(remoteUrl("/redirect")) === "foo")

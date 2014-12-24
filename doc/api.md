@@ -28,16 +28,7 @@ server configs {
 ```
 
 #### Matcher Apis:
-- [uri](#matcher-uri)
-- [method](#matcher-method)
-- [text](#matcher-text)
-- [file](#matcher-file)
-- [version](#matcher-version)
-- [header](#matcher-header)
-- [query](#matcher-query)
-- [cookie](#matcher-cookie)
-
-#####matcher-uri
+#####Uri
 
 match by uri
 ```scala
@@ -58,36 +49,36 @@ when {
     method("get")
 }
 ```
-#####matcher-text
+#####Text
 
-  by value
+by value
 ```scala
 when {
     text("foo")
 }
 ```
-  by regex
+or by regex
 ```scala
 when {
     text matched "hello.+"
 }
 ```
 
-#####matcher-file
+#####File
 ```scala
 when {
     file("foo.req")
 }
 ```
 
-#####matcher-version
+#####Version
 ```scala
 when {
     version("HTTP/1.0")
 }
 ```
 
-#####matcher-header
+#####Header
 
 match by value
 ```scala
@@ -101,7 +92,7 @@ when {
     header("Content-Type") matched ".+json"
 }
 ```
-#####matcher-query
+#####Query
 
 match by value
 ```scala
@@ -109,16 +100,16 @@ when {
      query("foo") === "bar"
 }
 ```
-   or by regex:
+or by regex:
 ```scala
 when {
      query("foo") matched ".+bar"
 }
 ```
 
-#####matcher-cookie
+#####Cookie
 
-  match by value
+match by value
 ```scala
 when {
     cookie("foo") === "bar"
@@ -131,17 +122,59 @@ when {
 }
 ```
 
+#####Form
+
+you can do exact match by form value
+```scala
+when {
+  form("foo") === "bar"
+}
+````
+or by match value with regex
+
+```scala
+when {
+  form("foo") matched "ba.+"
+}
+````
+
+#####Xml
+
+```scala
+when {
+  xml("<body>something</body>")
+}
+```
+
+#####Xpath
+similarly, you can do exact match by value
+```scala
+when {
+  xpath("/request/parameters/id/text()") === "foo"
+}
+
+```
+or match by regex
+
+```scala
+when {
+  xpath("/request/parameters/id/text()") matched "fo.+"
+}
+
+```
+
+#####Json
+```scala
+when {
+  json("{\"foo\": \"bar\"}")
+}
+```
+#####Jsonpath
+similar to xpath.
 
 #### Response Apis:
-- [text](#response-text)
-- [file](#response-file)
-- [version](#response-version)
-- [header](#response-header)
-- [cookie](#response-cookie)
-- [status](#response-status)
-- [version](#response-version)
 
-#####response-text
+#####Text
 
 ```scala
 then {
@@ -149,14 +182,14 @@ then {
 }
 ```
 
-#####response-file
+#####File
 ```scala
 then {
     file("foo.req")
 }
 ```
 
-#####response-header
+#####Header
 
 ```scala
 then {
@@ -164,7 +197,7 @@ then {
 }
 ```
 
-#####response-cookie
+#####Cookie
 
 ```scala
 then {
@@ -172,14 +205,14 @@ then {
 }
 ```
 
-##### response-status
+##### Status
 
 ```scala
 then {
     status 200
 }
 ```
-##### response-version
+##### Version
 
 ```scala
 then {
@@ -187,6 +220,111 @@ then {
 }
 ```
 
+#####Proxy Apis
+
+
+#####Single URL
+We can response with a specified url, just like a proxy.
+
+```scala
+then {
+  proxy("http://example.com")
+}
+```
+#####Failover
+Proxy also support failover
+
+```scala
+then {
+  proxy("http://example.com") {
+    failover("failover.json")
+  }
+}
+```
+
+#####Playback
+We also supports playback with save remote request and resonse into local file.
+```scala
+then {
+  proxy("http://example.com") {
+    playback("playback.json")
+  }
+}
+```
+
+#####Batch URLs
+Proxy also support proxying a batch of URLs in the same context
+```scala
+when {
+  method("GET") and uri matched "/proxy/.*"
+} then {
+  proxy {
+    from("/proxy") to ("http://localhost:9090/target")
+  }
+}
+```
+
+#####Redirect Api:
+
+You can simply redirect a request to a different location:
+
+```scala
+when {
+  uri("/redirect")
+} then {
+  redirectTo("/target")
+}
+```
+
+#####Attachment
+You can setup a attachment as response
+```scala
+then {
+  attachment("filename", file("filepath"))
+}
+```
+
+#####Latency
+You can simulate a slow response:
+```scala
+then {
+  //you need to import scala.concurrent.duration.Duration to have this syntax sugar
+  latency(2 seconds)
+}
+```
+
+#####Sequence
+You can simulate a sequence of response:
+```scala
+then {
+  seq("foo", "bar", "blah")
+}
+```
+
+
+#####Event
+You can specify a subsequent action once the response was sent:
+```scala
+server on {
+    complete{
+      get("http"//another_site)
+    }
+}
+```
+
+
+#####Asynchronous
+You can use async api to fire event asynchronsously
+
+```scala
+server on {
+    complete {
+      async {
+        get("http"//another_site)
+      }
+    }
+}
+```
 
 ### Advanced Usage
 

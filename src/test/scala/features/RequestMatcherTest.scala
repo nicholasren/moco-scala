@@ -141,6 +141,19 @@ class RequestMatcherTest extends FunSpec with BeforeAndAfter with RemoteTestHelp
       }
     }
 
+    it("match by form") {
+      theServer when {
+        form("foo") === "bar"
+      } then {
+        text("bar")
+      }
+
+      theServer running {
+        assert(post(root, "foo" -> "bar") === "bar")
+      }
+
+    }
+
     it("can define multi matchers") {
       theServer when {
         method("get")
