@@ -40,83 +40,96 @@ server configs {
 #####matcher-uri
 
 match by uri
-```
+```scala
 when {
     uri("/hello")
-}```
-or match by regex
+}
 ```
+or match by regex
+```scala
 when {
     uri matched "/hello.+"
-}```
+}
+```
 
 #####matcher-method
-```
+```scala
 when {
     method("get")
-}```
+}
+```
 #####matcher-text
 
   by value
-```
+```scala
 when {
     text("foo")
-}```
-  by regex
+}
 ```
+  by regex
+```scala
 when {
     text matched "hello.+"
-}```
+}
+```
 
 #####matcher-file
-```
+```scala
 when {
     file("foo.req")
-}```
+}
+```
 
 #####matcher-version
-```
+```scala
 when {
     version("HTTP/1.0")
-}```
+}
+```
 
 #####matcher-header
 
 match by value
-```
+```scala
 when {
     header("Content-Type") === "application/json"
-}```
-or by regex
+}
 ```
+or by regex
+```scala
 when {
     header("Content-Type") matched ".+json"
-}```
+}
+```
 #####matcher-query
 
 match by value
-```
+```scala
 when {
      query("foo") === "bar"
-}```
-   or by regex:
+}
 ```
+   or by regex:
+```scala
 when {
      query("foo") matched ".+bar"
-}```
+}
+```
 
 #####matcher-cookie
 
   match by value
-```
+```scala
 when {
     cookie("foo") === "bar"
-}```
-  or by regex:
+}
 ```
+  or by regex:
+```scala
 when {
     cookie("foo") matched ".+bar"
-}```
+}
+```
 
 
 #### Response Apis:
