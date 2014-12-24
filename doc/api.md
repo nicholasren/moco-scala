@@ -141,45 +141,51 @@ when {
 - [status](#response-status)
 - [version](#response-version)
 
-#####text[response-text]
+#####response-text
 
-```
+```scala
 then {
     text("foo")
-}```
-
-#####file[response-file]
+}
 ```
+
+#####response-file
+```scala
 then {
     file("foo.req")
-}```
-
-#####header[response-header]
-
+}
 ```
+
+#####response-header
+
+```scala
 then {
     headers("Content-Type" -> "json", "Accept" -> "html")
-}```
-
-#####cookie[response-cookie]
-
+}
 ```
+
+#####response-cookie
+
+```scala
 then {
     cookie("foo" -> "bar")
-}```
-
-#####status[response-status]
-
+}
 ```
+
+##### response-status
+
+```scala
 then {
     status 200
-}```
-#####versionresponse-version]
-
+}
 ```
+##### response-version
+
+```scala
 then {
     version("HTTP/1.0")
-}```
+}
+```
 
 
 ### Advanced Usage
