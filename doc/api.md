@@ -37,7 +37,7 @@ server configs {
 - [query](#matcher-query)
 - [cookie](#matcher-cookie)
 
-#####uri [matcher-uri]
+#####matcher-uri
 
 match by uri
 ```
@@ -50,12 +50,12 @@ when {
     uri matched "/hello.+"
 }```
 
-#####method [matcher-method]
+#####matcher-method
 ```
 when {
     method("get")
 }```
-#####text[matcher-text]
+#####matcher-text
 
   by value
 ```
@@ -68,18 +68,19 @@ when {
     text matched "hello.+"
 }```
 
-#####file[matcher-file]
+#####matcher-file
 ```
 when {
     file("foo.req")
 }```
 
-#####version[matcher-version]
+#####matcher-version
 ```
 when {
     version("HTTP/1.0")
 }```
-#####header[matcher-header]
+
+#####matcher-header
 
 match by value
 ```
@@ -91,7 +92,7 @@ or by regex
 when {
     header("Content-Type") matched ".+json"
 }```
-#####query[matcher-query]
+#####matcher-query
 
 match by value
 ```
@@ -104,7 +105,7 @@ when {
      query("foo") matched ".+bar"
 }```
 
-#####cookie[matcher-cookie]
+#####matcher-cookie
 
   match by value
 ```
