@@ -12,11 +12,11 @@ crossScalaVersions := Seq("2.11.4", "2.12.3")
 
 libraryDependencies += "com.github.dreamhead" % "moco-core" % "0.10.0"
 
-libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.1" % "test"
-
 libraryDependencies += "org.apache.httpcomponents" % "fluent-hc" % "4.2.5" % "test"
 
-libraryDependencies += "org.scalamock" %% "scalamock-scalatest-support" % "3.2" % "test"
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.1" % "test"
+
+libraryDependencies += "org.scalamock" %% "scalamock-scalatest-support" % "3.6.0" % "test"
 
 publishTo <<= version { v: String =>
   val nexus = "https://oss.sonatype.org/"

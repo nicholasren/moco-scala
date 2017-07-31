@@ -28,7 +28,7 @@ server configs {
 ```
 
 #### Matcher Apis:
-#####Uri
+##### Uri
 
 match by uri
 ```scala
@@ -43,13 +43,13 @@ when {
 }
 ```
 
-#####matcher-method
+##### matcher-method
 ```scala
 when {
     method("get")
 }
 ```
-#####Text
+##### Text
 
 by value
 ```scala
@@ -64,7 +64,7 @@ when {
 }
 ```
 
-#####File
+##### File
 ```scala
 when {
     file("foo.req")
@@ -92,7 +92,7 @@ when {
     header("Content-Type") matched ".+json"
 }
 ```
-#####Query
+##### Query
 
 match by value
 ```scala
@@ -107,7 +107,7 @@ when {
 }
 ```
 
-#####Cookie
+##### Cookie
 
 match by value
 ```scala
@@ -122,7 +122,7 @@ when {
 }
 ```
 
-#####Form
+##### Form
 
 you can do exact match by form value
 ```scala
@@ -138,7 +138,7 @@ when {
 }
 ````
 
-#####Xml
+##### Xml
 
 ```scala
 when {
@@ -182,14 +182,14 @@ then {
 }
 ```
 
-#####File
+##### File
 ```scala
 then {
     file("foo.req")
 }
 ```
 
-#####Header
+##### Header
 
 ```scala
 then {
@@ -197,7 +197,7 @@ then {
 }
 ```
 
-#####Cookie
+##### Cookie
 
 ```scala
 then {
@@ -242,7 +242,7 @@ then {
 }
 ```
 
-#####Playback
+##### Playback
 We also supports playback with save remote request and resonse into local file.
 ```scala
 then {
@@ -252,7 +252,7 @@ then {
 }
 ```
 
-#####Batch URLs
+##### Batch URLs
 Proxy also support proxying a batch of URLs in the same context
 ```scala
 when {
@@ -264,7 +264,7 @@ when {
 }
 ```
 
-#####Redirect Api:
+##### Redirect Api:
 
 You can simply redirect a request to a different location:
 
@@ -276,7 +276,7 @@ when {
 }
 ```
 
-#####Attachment
+##### Attachment
 You can setup a attachment as response
 ```scala
 then {
@@ -284,7 +284,7 @@ then {
 }
 ```
 
-#####Latency
+##### Latency
 You can simulate a slow response:
 ```scala
 then {
@@ -293,7 +293,7 @@ then {
 }
 ```
 
-#####Sequence
+##### Sequence
 You can simulate a sequence of response:
 ```scala
 then {
@@ -302,7 +302,7 @@ then {
 ```
 
 
-#####Event
+##### Event
 You can specify a subsequent action once the response was sent:
 ```scala
 server on {
@@ -313,7 +313,7 @@ server on {
 ```
 
 
-#####Asynchronous
+##### Asynchronous
 You can use async api to fire event asynchronsously
 
 ```scala
