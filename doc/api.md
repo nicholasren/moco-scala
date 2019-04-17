@@ -71,14 +71,14 @@ when {
 }
 ```
 
-#####Version
+##### Version
 ```scala
 when {
     version("HTTP/1.0")
 }
 ```
 
-#####Header
+##### Header
 
 match by value
 ```scala
@@ -146,7 +146,7 @@ when {
 }
 ```
 
-#####Xpath
+##### Xpath
 similarly, you can do exact match by value
 ```scala
 when {
@@ -163,18 +163,18 @@ when {
 
 ```
 
-#####Json
+##### Json
 ```scala
 when {
   json("{\"foo\": \"bar\"}")
 }
 ```
-#####Jsonpath
+##### Jsonpath
 similar to xpath.
 
 #### Response Apis:
 
-#####Text
+##### Text
 
 ```scala
 then {
@@ -220,10 +220,10 @@ then {
 }
 ```
 
-#####Proxy Apis
+##### Proxy Apis
 
 
-#####Single URL
+##### Single URL
 We can response with a specified url, just like a proxy.
 
 ```scala
@@ -231,7 +231,7 @@ then {
   proxy("http://example.com")
 }
 ```
-#####Failover
+##### Failover
 Proxy also support failover
 
 ```scala
