@@ -29,7 +29,7 @@ with RemoteTestHelper {
       When("The server serving requests")
       theServer when {
         method("get")
-      } then {
+      } andThen {
         file("bar.response")
       }
 
@@ -54,7 +54,7 @@ with RemoteTestHelper {
       When("The server serving requests")
       theServer when {
         method("get")
-      } then {
+      } andThen {
         text("world")
       }
 

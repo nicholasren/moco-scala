@@ -1,9 +1,8 @@
 package org.github.nicholasren.moco.helper
 
-import org.apache.http.client.fluent.Request
-import scala.Predef.String
-import org.apache.http.message.BasicNameValuePair
 import org.apache.http.HttpVersion
+import org.apache.http.client.fluent.Request
+import org.apache.http.message.BasicNameValuePair
 
 trait RemoteTestHelper {
 

@@ -5,9 +5,9 @@ import org.github.nicholasren.moco.helper.RemoteTestHelper
 import com.github.nicholasren.moco.dsl.{Conversions, SMoco}
 import com.github.nicholasren.moco.dsl.SMoco._
 import com.github.dreamhead.moco.MocoEventAction
-import org.scalatest.mock.MockitoSugar
 import Conversions._
 import org.mockito.Mockito._
+import org.scalatest.mockito.MockitoSugar
 
 class EventActionTest extends FunSpec with BeforeAndAfter with RemoteTestHelper with MockitoSugar {
   override val port: Int = 8083
