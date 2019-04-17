@@ -20,7 +20,7 @@ if you want to try latest version, just add snapshot repo to dependency resolver
 resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
 ```
 
-###Quick Start:
+### Quick Start:
 
 #### Import dependencies
 ```scala
@@ -45,7 +45,7 @@ theServer running  {
 }
 ```
 
-###Document
+### Document
 api document can be found [here.](doc/api.md)
 
 also, please refer to [functional tests](https://github.com/nicholasren/moco-scala/tree/master/src/test/scala/features) for detail usage.
